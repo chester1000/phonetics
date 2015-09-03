@@ -82,17 +82,19 @@ angular.module 'phoneticsApp', ['ngMaterial']
           cb err, []
     @
 
-  .controller 'LangCtrl', ($scope, ParseServ, measurer, $mdColorPalette, utils) ->
+  .controller 'LangCtrl', ($scope, ParseServ, measurer, $mdColorPalette, utils, $rootScope) ->
     $scope.dynamicTheme = 'default'
 
     measurer.registerGridChange (newGridIdx) ->
       if newGridIdx is 0
         $scope.dynamicTheme = 'default'
         $scope.title = null
+        $rootScope.currentThemeColor = utils.rgbToHex.apply @, $mdColorPalette[v.palette].A200.value
 
       else
         $scope.dynamicTheme = $scope.langs[newGridIdx - 1].palette
         $scope.title = $scope.langs[newGridIdx - 1].name
+        $rootScope.currentThemeColor = $scope.langs[newGridIdx - 1].color
 
       $scope.$apply()
 
@@ -194,7 +196,6 @@ angular.module 'phoneticsApp', ['ngMaterial']
         player.addEventListener 'ended', ->
           scope.playing = false
           scope.$apply()
-
 
   .directive 'gridBoard', (measurer) ->
     restrict: 'A'

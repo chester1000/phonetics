@@ -101,15 +101,17 @@
       });
     };
     return this;
-  }).controller('LangCtrl', function($scope, ParseServ, measurer, $mdColorPalette, utils) {
+  }).controller('LangCtrl', function($scope, ParseServ, measurer, $mdColorPalette, utils, $rootScope) {
     $scope.dynamicTheme = 'default';
     measurer.registerGridChange(function(newGridIdx) {
       if (newGridIdx === 0) {
         $scope.dynamicTheme = 'default';
         $scope.title = null;
+        $rootScope.currentThemeColor = utils.rgbToHex.apply(this, $mdColorPalette[v.palette].A200.value);
       } else {
         $scope.dynamicTheme = $scope.langs[newGridIdx - 1].palette;
         $scope.title = $scope.langs[newGridIdx - 1].name;
+        $rootScope.currentThemeColor = $scope.langs[newGridIdx - 1].color;
       }
       return $scope.$apply();
     });
