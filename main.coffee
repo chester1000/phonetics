@@ -84,6 +84,7 @@ angular.module 'phoneticsApp', ['ngMaterial']
 
   .controller 'LangCtrl', ($scope, ParseServ, measurer, $mdColorPalette, utils, $rootScope) ->
     $scope.dynamicTheme = 'default'
+    $rootScope.currentThemeColor = utils.rgbToHex.apply @, $mdColorPalette[v.palette].A200.value
 
     measurer.registerGridChange (newGridIdx) ->
       if newGridIdx is 0

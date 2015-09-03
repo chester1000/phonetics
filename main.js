@@ -103,6 +103,7 @@
     return this;
   }).controller('LangCtrl', function($scope, ParseServ, measurer, $mdColorPalette, utils, $rootScope) {
     $scope.dynamicTheme = 'default';
+    $rootScope.currentThemeColor = utils.rgbToHex.apply(this, $mdColorPalette[v.palette].A200.value);
     measurer.registerGridChange(function(newGridIdx) {
       if (newGridIdx === 0) {
         $scope.dynamicTheme = 'default';
