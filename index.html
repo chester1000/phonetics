@@ -8,59 +8,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-    <link rel="stylesheet" id="stylesFile" href="//storage.googleapis.com/code.getmdl.io/1.0.4/material.deep_orange-blue.min.css">
-
-    <script src="//storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="styles.css">
 
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
     <script src="//www.parsecdn.com/js/parse-1.5.0.min.js"></script>
 
-    <link rel="stylesheet" href="styles.css">
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/0.10.1/angular-material.min.js"></script>
+
     <script src="main.js"></script>
+    <script src="utils.js"></script>
   </head>
-  <body ng-controller="LangCtrl">
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <body ng-controller="LangCtrl" md-theme="{{ dynamicTheme }}" snap>
+    <md-toolbar scroll>
+      <div class="md-toolbar-tools">
+        <h2>
+          <span>{{title || "Choose a language"}}</span>
+        </h2>
+        <span flex></span>
+        <md-switch ng-model="soundNameInstead">{{soundNameInstead ? 'name' : 'sound'}}</md-switch>
+      </div>
+    </md-toolbar>
 
-      <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
-          <span class="mdl-layout-title">{{title}}</span>
-          <div class="mdl-layout-spacer"></div>
-          <nav class="mdl-navigation">
+    <md-content>
+      <md-grid-list
+        grid-board
+        md-cols-sm="4"
+        md-cols-md="6"
+        md-cols-lg="8"
+        md-cols-gt-lg="10"
+        md-row-height="1:1"
+        md-gutter="0px"
+        md-on-layout="setMinHeight()">
 
-            <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch">
-              <input type="checkbox" id="switch" class="mdl-switch__input"
-                ng-model="soundsType"
-                ng-checked="false"
-                ng-true-value="'name'"
-                ng-false-value="'sound'" />
-                <span id="switch-label" class="mdl-switch__label">{{soundsType}}</span>
-            </label>
+        <md-grid-tile
+          ng-repeat="lang in langs"
+          md-rowspan="{{ langTileSize }}"
+          md-colspan="{{ langTileSize }}"
+          class="md-title"
+          style="background-color: {{lang.color}}">
 
-          </nav>
-        </div>
-      </header>
+            <a href="#{{lang.code}}">{{ lang.name }}</a>
+        </md-grid-tile>
+      </md-grid-list>
 
-      <main class="mdl-layout__content">
-        <div class="page-content">
+      <div id="{{lang.code}}"
+        grid-board
+        ng-controller="SoundBoardCtrl"
+        ng-repeat="lang in langs"
 
-          <div id="languages" class="mdl-grid">
-            <div ng-repeat="lang in langs" class="mdl-cell mdl-cell--2-col" style="background-color: {{lang.color}}">
-              <a href="#{{lang.code}}">{{ lang.name }}</a>
-            </div>
-          </div>
+        style="background-color: {{lang.color}}">
 
-          <div ng-controller="SoundBoardCtrl" ng-repeat="lang in langs" id="{{lang.code}}" class="mdl-grid"  style="background-color: {{lang.color}}">
-            <a-sound ng-repeat="s in sounds | orderBy:normalizedSoundName" class="lalala mdl-cell mdl-cell--2-col">
+        <md-grid-list
+          md-cols-sm="4"
+          md-cols-md="6"
+          md-cols-lg="8"
+          md-cols-gt-lg="10"
+          md-row-height="1:1"
+          md-gutter="0px"
+          md-on-layout="setMinHeight()">
+
+          <md-grid-tile ng-repeat="s in sounds | orderBy:normalizedSoundName">
+            <md-button a-sound md-ripple-size="partial">
               <audio ng-src="{{s.sound}}"></audio>
-              <span>{{s.name | soundName }}</span>
-              <i class="material-icons">play_circle_outline</i>
-            </a-sound>
-          </div>
+              <span class="md-display-2 no-upper">{{s.name | soundName }}</span><br />
+              <i class="material-icons" ng-hide="playing">play_circle_outline</i>
+              <i class="material-icons" ng-show="playing">pause_circle_outline</i>
+            </md-button>
+          </md-grid-tile>
 
-        </div>
-      </main>
-    </div>
+        </md-grid-list>
+      </div>
+    </md-content>
 
     <script>
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=

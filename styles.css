@@ -1,3 +1,21 @@
-#switch-label {
-  width: 46px;
+md-switch {
+  width: 100px;
+}
+
+[scroll] {
+  position: fixed;
+  top: 0;
+}
+
+md-content {
+  padding-top: 64px;
+}
+
+md-button {
+  height: 100%;
+  width: 100%;
+}
+
+.no-upper {
+  text-transform: none;
 }
