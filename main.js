@@ -15,6 +15,9 @@
       }, {
         primary: 'amber',
         accent: 'blue'
+      }, {
+        primary: 'teal',
+        accent: 'deep-purple'
       }
     ];
     for (j = 0, len = themes.length; j < len; j++) {
@@ -118,7 +121,7 @@
     $scope.langTileSize = 2;
     return ParseServ.getLangs(function(err, langs) {
       var i, j, len, tmpSizes, v;
-      if (langs.length < 4) {
+      if (langs.length <= 4) {
         $scope.langTileSize = 2;
       } else {
         $scope.langTileSize = 1;

@@ -1,7 +1,7 @@
 {Parse} = require 'node-parse-api'
 fs      = require 'fs'
 
-config  = require './parseSecrets.json'
+config  = require '../../parseSecrets.json'
 
 app = new Parse config.APP_ID, config.MASTER_KEY
 
