@@ -1,3 +1,10 @@
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans:700&subset=latin,latin-ext);
+@import url(https://fonts.googleapis.com/earlyaccess/notosansthai.css);
+
+html {
+  font-family: 'Noto Sans Thai', 'Noto Sans', sans-serif, !important;
+}
+
 md-switch {
   width: 100px;
 }
@@ -16,6 +23,14 @@ md-button {
   width: 100%;
 }
 
-.no-upper {
-  text-transform: none;
+.lang-name {
+  text-transform: uppercase;
+  font-weight: 700;
+  text-decoration: none;
+  color: #000;
+}
+
+.letter {
+  text-transform: uppercase;
+  font-weight: 700;
 }

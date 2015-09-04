@@ -51,8 +51,7 @@
           md-colspan="{{ langTileSize }}"
           class="md-title"
           style="background-color: {{lang.color}}">
-
-            <a href="#{{lang.code}}">{{ lang.name }}</a>
+            <a href="#{{lang.code}}" class="lang-name">{{ lang.name }}</a>
         </md-grid-tile>
       </md-grid-list>
 
@@ -72,13 +71,9 @@
           md-gutter="0px"
           md-on-layout="setMinHeight()">
 
-          <md-grid-tile ng-repeat="s in sounds | orderBy:normalizedSoundName">
-            <md-button a-sound md-ripple-size="partial">
-              <audio ng-src="{{s.sound}}"></audio>
-              <span class="md-display-2 no-upper">{{s.name | soundName }}</span><br />
-              <i class="material-icons" ng-hide="playing">play_circle_outline</i>
-              <i class="material-icons" ng-show="playing">pause_circle_outline</i>
-            </md-button>
+          <md-grid-tile a-sound ng-repeat="s in sounds | orderBy:normalizedSoundName">
+            <audio ng-src="{{s.sound}}"></audio>
+            <span class="md-display-3 letter">{{ s.name }}</span>
           </md-grid-tile>
 
         </md-grid-list>

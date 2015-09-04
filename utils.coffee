@@ -76,8 +76,6 @@ angular.module 'phoneticsApp'
 
       requestAnimationFrame scroll
 
-
-
     rgbToHex: (r, g, b) ->
       _componentToHex = (c) ->
         hex = c.toString 16

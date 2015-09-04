@@ -1,5 +1,4 @@
 angular.module 'phoneticsApp', ['ngMaterial']
-  .filter 'soundName', -> (input) -> input.toUpperCase() + input.toLowerCase()
   .config ($sceDelegateProvider, $mdThemingProvider) ->
     $sceDelegateProvider.resourceUrlWhitelist [
       'self'
@@ -214,11 +213,11 @@ angular.module 'phoneticsApp', ['ngMaterial']
   .directive 'snap', ($window, utils, measurer) ->
     (scope, element, attrs) ->
 
-      debounced = utils.debounce 200, ->
+      debounced = utils.debounce 100, ->
         info = measurer.getCurrentGridInfo()
 
         if info.needsScrolling
-          utils.scrollTo info.nearestPoint, 666, utils.easingFunctions.easeInOutQuint
+          utils.scrollTo info.nearestPoint, 200, utils.easingFunctions.easeInOutQuint
 
       angular.element($window).bind 'scroll', ->
         measurer.getCurrentGridInfo()
