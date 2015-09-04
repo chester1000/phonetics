@@ -73,7 +73,7 @@
           md-on-layout="setMinHeight()">
 
           <md-grid-tile a-sound ng-repeat="s in sounds | orderBy:normalizedSoundName">
-            <audio ng-src="{{s.sound}}" preload="auto"></audio>
+            <audio ng-src="{{s.sound || s.soundName}}" preload="auto"></audio>
             <a href="#{{lang.code}}_{{s.name}}" class="md-display-3 letter">{{ s.name }}</a>
           </md-grid-tile>
 
