@@ -2,7 +2,7 @@
 @import url(https://fonts.googleapis.com/earlyaccess/notosansthai.css);
 
 html {
-  font-family: 'Noto Sans Thai', 'Noto Sans', sans-serif, !important;
+  font-family: 'Noto Sans Thai', 'Noto Sans', sans-serif !important;
 }
 
 md-switch {
@@ -23,14 +23,14 @@ md-button {
   width: 100%;
 }
 
-.lang-name {
-  text-transform: uppercase;
+.lang-name, .letter {
+  height: 98%;
+  width: 98%;
   font-weight: 700;
+  text-transform: uppercase;
   text-decoration: none;
   color: #000;
-}
-
-.letter {
-  text-transform: uppercase;
-  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -97,6 +97,9 @@
           var currentTime, easedT, time;
           currentTime = Date.now();
           time = Math.min(1, (currentTime - start) / duration);
+          if (easingFunction == null) {
+            easingFunction = this.easingFunctions.easeInOutQuint;
+          }
           easedT = easingFunction(time);
           $window.scrollTo(0, (easedT * (Y - from)) + from);
           if (time < 1) {

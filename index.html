@@ -1,17 +1,18 @@
 <!doctype html>
 <html ng-app="phoneticsApp" class="no-js" lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>Phonetics</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta meta-theme name="theme-color" content="{{ currentThemeColor }}">
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="google" content="notranslate" />
+    <meta meta-theme name="theme-color" content="{{ currentThemeColor }}" />
 
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css">
-    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="styles.css" />
 
     <script src="//www.parsecdn.com/js/parse-1.5.0.min.js"></script>
 
@@ -72,8 +73,8 @@
           md-on-layout="setMinHeight()">
 
           <md-grid-tile a-sound ng-repeat="s in sounds | orderBy:normalizedSoundName">
-            <audio ng-src="{{s.sound}}"></audio>
-            <span class="md-display-3 letter">{{ s.name }}</span>
+            <audio ng-src="{{s.sound}}" preload="auto"></audio>
+            <a href="#{{lang.code}}_{{s.name}}" class="md-display-3 letter">{{ s.name }}</a>
           </md-grid-tile>
 
         </md-grid-list>

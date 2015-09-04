@@ -1,9 +1,11 @@
 angular.module 'phoneticsApp', ['ngMaterial']
-  .config ($sceDelegateProvider, $mdThemingProvider) ->
+  .config ($sceDelegateProvider, $locationProvider, $mdThemingProvider) ->
     $sceDelegateProvider.resourceUrlWhitelist [
       'self'
       'http://files.parsetfss.com/**'
     ]
+
+    $locationProvider.html5Mode true
 
     $mdThemingProvider.alwaysWatchTheme true
 

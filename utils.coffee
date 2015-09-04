@@ -65,6 +65,7 @@ angular.module 'phoneticsApp'
       scroll = (timestamp) ->
         currentTime = Date.now()
         time = Math.min 1, (currentTime - start) / duration
+        easingFunction ?= @easingFunctions.easeInOutQuint
         easedT = easingFunction time
 
         $window.scrollTo 0, (easedT * (Y - from)) + from
