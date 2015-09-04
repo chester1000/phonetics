@@ -34,3 +34,7 @@ md-button {
   justify-content: center;
   align-items: center;
 }
+
+.disabled {
+  color: #555 !important;
+}
