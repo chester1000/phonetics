@@ -1,4 +1,4 @@
-angular.module 'phoneticsApp', ['ngMaterial']
+angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
   .config ($sceDelegateProvider, $locationProvider, $mdThemingProvider) ->
     $sceDelegateProvider.resourceUrlWhitelist [
       'self'

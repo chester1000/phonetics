@@ -18,11 +18,6 @@ md-content {
   padding-top: 64px;
 }
 
-md-button {
-  height: 100%;
-  width: 100%;
-}
-
 .lang-name, .letter {
   height: 98%;
   width: 98%;
@@ -37,4 +32,25 @@ md-button {
 
 .disabled {
   color: #555 !important;
+}
+
+[angular-ripple] {
+  position: relative;
+  overflow: hidden;
+}
+.angular-ripple {
+  display: block;
+  position: absolute;
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 50%;
+  transform: scale(0);
+}
+.angular-ripple.animate {
+  animation: ripple 0.35s linear;
+}
+@keyframes ripple {
+  100% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
 }

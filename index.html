@@ -22,13 +22,14 @@
     <script src="//ajax.googleapis.com/ajax/libs/angular_material/0.10.1/angular-material.min.js"></script>
 
     <script src="main.js"></script>
+    <script src="angular-ripple.js"></script>
     <script src="utils.js"></script>
   </head>
   <body ng-controller="LangCtrl" md-theme="{{ dynamicTheme }}" snap>
     <md-toolbar scroll>
       <div class="md-toolbar-tools">
         <h2>
-          <span>{{title || "Choose a language"}}</span>
+          <span>{{title || "Choose one"}}</span>
         </h2>
         <span flex></span>
         <md-switch ng-model="soundNameInstead">{{soundNameInstead ? 'name' : 'sound'}}</md-switch>
@@ -52,7 +53,7 @@
           md-colspan="{{ langTileSize }}"
           class="md-title"
           style="background-color: {{lang.color}}">
-            <a href="#{{lang.code}}" class="lang-name">{{ lang.name }}</a>
+            <a angular-ripple href="#{{lang.code}}" class="lang-name">{{ lang.name }}</a>
         </md-grid-tile>
       </md-grid-list>
 
@@ -74,7 +75,7 @@
 
           <md-grid-tile a-sound ng-repeat="s in sounds | orderBy:normalizedSoundName">
             <audio ng-src="{{soundNameInstead ? s.soundName || s.sound : s.sound || s.soundName}}" preload="auto"></audio>
-            <a
+            <a angular-ripple
               href="#{{lang.code}}_{{s.name}}"
               ng-class="(soundNameInstead && !s.soundName) || (!soundNameInstead && !s.sound) ? 'disabled' : ''"
               class="md-display-3 letter">{{ s.name }}</a>
