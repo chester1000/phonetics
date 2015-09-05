@@ -6,7 +6,11 @@ html {
 }
 
 md-switch {
-  width: 100px;
+  flex-direction: row-reverse;
+}
+
+md-switch span {
+  margin-right: 16px;
 }
 
 [scroll] {
@@ -41,7 +45,7 @@ md-content {
 .angular-ripple {
   display: block;
   position: absolute;
-  background-color: rgba(0,0,0,0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   transform: scale(0);
 }
