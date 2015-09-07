@@ -26,12 +26,17 @@ md-content {
   height: 98%;
   width: 98%;
   font-weight: 700;
-  text-transform: uppercase;
   text-decoration: none;
-  color: #000;
+  color: #333;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.letter {
+  text-transform: lowercase;
+}
+.lang-name {
+  text-transform: capitalize;
 }
 
 .disabled {

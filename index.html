@@ -28,9 +28,7 @@
   <body ng-controller="LangCtrl" md-theme="{{ dynamicTheme }}" snap>
     <md-toolbar scroll>
       <div class="md-toolbar-tools">
-        <h2>
-          <span>{{title || "Choose one"}}</span>
-        </h2>
+        <h2>{{title || "Choose one"}}</h2>
         <span flex></span>
         <md-switch ng-model="soundNameInstead">{{soundNameInstead ? 'name' : 'sound'}}</md-switch>
       </div>
@@ -78,7 +76,7 @@
             <a angular-ripple
               href="#{{lang.code}}_{{s.name}}"
               ng-class="(soundNameInstead && !s.soundName) || (!soundNameInstead && !s.sound) ? 'disabled' : ''"
-              class="md-display-3 letter">{{ s.name }}</a>
+              class="md-display-3 letter">{{ s.altNames[0] || s.name }}</a>
 
           </md-grid-tile>
 
