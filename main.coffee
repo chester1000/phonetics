@@ -21,6 +21,9 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
     ,
       primary: 'teal'
       accent: 'deep-purple'
+    ,
+      primary: 'red'
+      accent: 'green'
     ]
 
     for t in themes
@@ -108,10 +111,10 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
     $scope.langTileSize = 2
 
     ParseServ.getLangs (err, langs) ->
-      if langs.length <= 4
-        $scope.langTileSize = 2
-      else
-        $scope.langTileSize = 1
+      # if langs.length <= 4
+      $scope.langTileSize = 2
+      # else
+      #   $scope.langTileSize = 1
 
       tmpSizes = [
         idx: 0
