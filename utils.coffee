@@ -1,5 +1,5 @@
 angular.module 'phoneticsApp'
-  .service 'utils', ($window) ->
+  .service 'utils', ($window, $mdColorPalette) ->
     debounce: (threshold, func) ->
       timeout = undefined
 
@@ -15,7 +15,6 @@ angular.module 'phoneticsApp'
           clearTimeout timeout
 
         timeout = setTimeout delayed, threshold
-
 
     normalize: (letter = '') ->
       letter = letter.toLowerCase()
@@ -36,7 +35,6 @@ angular.module 'phoneticsApp'
         .replace /\\W/g,        ''
 
       letter + '.'
-
 
     easingFunctions:
       linear:         (t) -> t
@@ -85,3 +83,6 @@ angular.module 'phoneticsApp'
         hex
 
       '#' + _componentToHex(r) + _componentToHex(g) + _componentToHex(b)
+
+    getColor: (themeName, hue='800') ->
+      @rgbToHex.apply @, $mdColorPalette[themeName][hue].value

@@ -1,3 +1,5 @@
+DEFAULT_THEME = 'indigo'
+
 angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
   .config ($sceDelegateProvider, $locationProvider, $mdThemingProvider) ->
     $sceDelegateProvider.resourceUrlWhitelist [
@@ -10,6 +12,9 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
     $mdThemingProvider.alwaysWatchTheme true
 
     themes = [
+      primary: DEFAULT_THEME # default - DO NOT USE
+      accent: 'pink'
+    ,
       primary: 'light-green'
       accent: 'pink'
     ,
@@ -28,27 +33,11 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
 
     for t in themes
       $mdThemingProvider
-        .theme t.primary
+        .theme          t.primary
         .primaryPalette t.primary
-        .accentPalette t.accent
+        .accentPalette  t.accent
 
-    lastTime = 0
-    for v in ['ms', 'moz', 'webkit', 'o'] when not window.requestAnimationFrame
-      window.requestAnimationFrame = window[v + 'RequestAnimationFrame']
-      window.cancelAnimationFrame = window[v + 'CancelAnimationFrame'] or window[v + 'CancelRequestAnimationFrame']
-
-    unless window.requestAnimationFrame
-      window.requestAnimationFrame = (callback, element) ->
-        currTime = new Date().getTime()
-        timeToCall = Math.max 0, 16 - (currTime - lastTime)
-        lastTime = currTime + timeToCall
-        window.setTimeout (-> callback currTime + timeToCall), timeToCall
-
-    unless window.cancelAnimationFrame
-      window.cancelAnimationFrame = (id) ->
-        clearTimeout id
-
-  .service 'ParseServ', ->
+  .service 'ParseServ', (utils) ->
     Parse.initialize 'BdvYraypXe3U33UV5mGBRgPmqC2xUyPoP54QgkML', 'kY4MCB6NyGtXjEY6TeAtFWr1zhLv377L3HIiBbas'
 
     Langs   = Parse.Object.extend 'Languages'
@@ -59,11 +48,14 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       query.find
         success: (results) ->
           cb null, results.map (r) ->
+            palette = r.get 'palette'
+
             id:           r.id
             name:         r.get 'name'
             originalName: r.get 'originalName'
             code:         r.get 'code'
-            palette:      r.get 'palette'
+            palette:      palette
+            color:        utils.getColor palette, 'A200'
 
         error: (err) ->
           cb err, []
@@ -89,46 +81,88 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
           cb err, []
     @
 
-  .controller 'LangCtrl', ($scope, ParseServ, measurer, $mdColorPalette, utils, $rootScope) ->
-    $scope.dynamicTheme = 'default'
-    $rootScope.currentThemeColor = utils.rgbToHex.apply @, $mdColorPalette['indigo']['800'].value
+  .service 'measurer', ($window) ->
+    _panelChangeListeners = []
 
-    measurer.registerGridChange (newGridIdx) ->
+    panels = []
+    currentPanel = 0
+
+    getToolbarHeight: -> 64
+    getWindowHeight: -> $window.innerHeight
+    getViewPortHeight: -> @getWindowHeight() - @getToolbarHeight()
+    onPanelChange: (callback) -> _panelChangeListeners.push callback
+
+    initPanels: (pre) ->
+      pre.unshift
+        name: 'langs'
+        height: @getViewPortHeight()
+
+      # pre.push
+      #   name: 'about'
+      #   height: @getViewPortHeight()
+
+      panels = pre
+
+    setSize: (name, height) -> s.height = height for s in panels when s.name is name
+    getBreakPoints: -> panels.reduce ((p, c, i) -> p.push c.height + p[i]; p), [0]
+    getCurrentPanelInfo: ->
+      _guessedPanel = null
+      scrollToPoint = false
+
+      top     = $window.scrollY
+      bottom  = top + @getViewPortHeight()
+
+      breakpoints = @getBreakPoints()
+      for b, i in breakpoints when i + 1 < breakpoints.length
+        if top >= b and bottom <= breakpoints[i + 1]
+          _guessedPanel = i
+          break
+
+        else if top < b and bottom > b
+          screenMiddle = top + @getViewPortHeight() / 2
+          if screenMiddle < b
+            _guessedPanel = i - 1
+
+            scrollToPoint = breakpoints[_guessedPanel]
+            if panels[i - 1].height > @getViewPortHeight()
+              scrollToPoint = breakpoints[i] - @getViewPortHeight()
+
+          else if screenMiddle >= b
+            _guessedPanel = i
+            scrollToPoint = breakpoints[i]
+
+          break
+
+      if _guessedPanel isnt currentPanel
+        currentPanel = _guessedPanel
+        cb currentPanel for cb in _panelChangeListeners
+
+      scrollToPoint
+
+  .controller 'LangCtrl', ($scope, ParseServ, measurer, utils, $rootScope) ->
+
+    $scope.soundNameInstead = false
+
+    setStuff = (theme, title) ->
+      $scope.title = title
+      $scope.dynamicTheme = theme
+      $rootScope.currentThemeColor = utils.getColor theme
+
+    setStuff DEFAULT_THEME
+
+    measurer.onPanelChange (newGridIdx) ->
       if newGridIdx is 0
-        $scope.dynamicTheme = 'default'
-        $scope.title = null
-        $rootScope.currentThemeColor = utils.rgbToHex.apply @, $mdColorPalette['indigo']['800'].value
+        setStuff DEFAULT_THEME
 
       else
-        $scope.dynamicTheme = $scope.langs[newGridIdx - 1].palette
-        $scope.title = $scope.langs[newGridIdx - 1].name
-        $rootScope.currentThemeColor = utils.rgbToHex.apply @, $mdColorPalette[$scope.dynamicTheme]['800'].value
+        c = $scope.langs[newGridIdx - 1]
+        setStuff c.palette, c.name
 
       $scope.$apply()
 
-    $scope.title = null
-    $scope.soundNameInstead = false
-    $scope.langTileSize = 2
-
     ParseServ.getLangs (err, langs) ->
-      # if langs.length <= 4
-      $scope.langTileSize = 2
-      # else
-      #   $scope.langTileSize = 1
-
-      tmpSizes = [
-        idx: 0
-        name: 'langs'
-        height: measurer.getViewPortHeight()
-      ]
-      for v, i in langs
-        tmpSizes.push
-          idx: i + 1
-          name: v.code
-
-        v.color = utils.rgbToHex.apply @, $mdColorPalette[v.palette].A200.value
-
-      measurer.initSizes tmpSizes
+      measurer.initPanels
+        name: v.code for v in langs
 
       $scope.langs = langs
       $scope.$apply()
@@ -141,55 +175,6 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
     ParseServ.getSounds lang, (err, sounds) ->
       $scope.sounds = sounds
       $scope.$apply()
-
-  .service 'measurer', ($window) ->
-    sizes = []
-
-    currentGrid = 0
-    gridChangeListeners = []
-
-    registerGridChange: (callback) -> gridChangeListeners.push callback
-    getToolbarHeight: -> 64
-    initSizes: (pre, s) -> sizes = pre
-    setSize: (name, height) -> s.height = height for s in sizes when s.name is name
-    getWindowHeight: -> $window.innerHeight
-    getViewPortHeight: -> @getWindowHeight() - @getToolbarHeight()
-    getBreakPoints: -> sizes.reduce ((p, c, i) -> p.push c.height + p[i]; p), [0]
-    getCurrentGridInfo: ->
-      status = {}
-
-      top = $window.scrollY
-      bottom = top + @getViewPortHeight()
-
-      breakpoints = @getBreakPoints()
-      for b, i in breakpoints when i + 1 < breakpoints.length
-        if top >= b and bottom <= breakpoints[i + 1]
-          status.needsScrolling = false
-          status.gridIdx = i
-          break
-
-        else if top < b and bottom > b
-          status.needsScrolling = true
-
-          screenMiddle = top + @getViewPortHeight() / 2
-          if screenMiddle < b
-            status.gridIdx = i - 1
-            status.nearestPoint = breakpoints[status.gridIdx]
-
-            if sizes[i - 1].height > @getViewPortHeight()
-              status.nearestPoint = breakpoints[i] - @getViewPortHeight()
-
-          else if screenMiddle >= b
-            status.gridIdx = i
-            status.nearestPoint = breakpoints[i]
-
-          break
-
-      if status.gridIdx isnt currentGrid
-        currentGrid = status.gridIdx
-        cb currentGrid for cb in gridChangeListeners
-
-      status
 
   .directive 'aSound', ->
     restrict: 'A'
@@ -205,28 +190,44 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
           scope.playing = false
           scope.$apply()
 
-  .directive 'gridBoard', (measurer) ->
+  .directive 'aPanel', (measurer, $window, utils) ->
     restrict: 'A'
     link: (scope, el, attr) ->
-      scope.setMinHeight = ->
+      calculateHeight = ->
         minHeight = Math.max measurer.getViewPortHeight(), el[0].clientHeight
 
-        l = scope.lang?.code
-        if l
-          measurer.setSize l, minHeight
+        if attr.lastHeight isnt minHeight
+          attr.$set 'lastHeight', minHeight
 
-        el.css 'min-height', minHeight + 'px'
+          idx = scope.lang?.code
+
+          if not idx and scope.langs
+            idx = 'langs'
+
+          idx ?= 'about'
+
+          measurer.setSize idx, minHeight
+
+          el.css 'min-height', minHeight + 'px'
         return
+
+      scope.setMinHeight = calculateHeight
+
+      debouncedCalculate = utils.debounce 100, calculateHeight
+
+      angular.element($window).bind 'resize', ->
+        el.css 'min-height', '0px'
+        debouncedCalculate()
 
   .directive 'snap', ($window, utils, measurer) ->
     (scope, element, attrs) ->
 
-      debounced = utils.debounce 100, ->
-        info = measurer.getCurrentGridInfo()
+      debouncedScroll = utils.debounce 100, ->
+        scrollToPoint = measurer.getCurrentPanelInfo()
 
-        if info.needsScrolling
-          utils.scrollTo info.nearestPoint, 200, utils.easingFunctions.easeInOutQuint
+        if scrollToPoint != false
+          utils.scrollTo scrollToPoint, 200, utils.easingFunctions.easeInOutQuint
 
       angular.element($window).bind 'scroll', ->
-        measurer.getCurrentGridInfo()
-        debounced()
+        measurer.getCurrentPanelInfo()
+        debouncedScroll()

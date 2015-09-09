@@ -36,7 +36,7 @@
 
     <md-content>
       <md-grid-list
-        grid-board
+        a-panel
         md-cols-sm="4"
         md-cols-md="6"
         md-cols-lg="8"
@@ -47,8 +47,8 @@
 
         <md-grid-tile
           ng-repeat="lang in langs"
-          md-rowspan="{{ langTileSize }}"
-          md-colspan="{{ langTileSize }}"
+          md-rowspan="2"
+          md-colspan="2"
           class="md-title"
           style="background-color: {{lang.color}}">
             <a angular-ripple href="#{{lang.code}}" class="lang-name">{{ lang.name }}</a>
@@ -56,7 +56,7 @@
       </md-grid-list>
 
       <div id="{{lang.code}}"
-        grid-board
+        a-panel
         ng-controller="SoundBoardCtrl"
         ng-repeat="lang in langs"
 
