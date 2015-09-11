@@ -302,12 +302,9 @@
       return utils.normalize(sound.name);
     };
     $scope.toggleFilter = function(sound) {
-      var ref, ref1;
+      var ref;
       if (((ref = $scope.lang) != null ? ref.code : void 0) === 'pl') {
         return $scope.toggleStatus || sound.name.length === 1;
-      }
-      if (((ref1 = $scope.lang) != null ? ref1.code : void 0) === 'en') {
-        console.log(sound);
       }
       return true;
     };

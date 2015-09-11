@@ -34,7 +34,7 @@ angular.module 'phoneticsApp'
         .replace /[żź]/g,       'z'
         .replace /\\W/g,        ''
 
-      letter + '.'
+      letter + '_'
 
     easingFunctions:
       linear:         (t) -> t

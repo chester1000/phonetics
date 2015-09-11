@@ -212,8 +212,8 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       if $scope.lang?.code is 'pl'
         return $scope.toggleStatus or sound.name.length is 1
 
-      if $scope.lang?.code is 'en'
-        console.log sound
+      # if $scope.lang?.code is 'en'
+      #   console.log sound
 
       return true
 
@@ -221,7 +221,8 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       if $scope.lang?.code is 'bopo'
         unless $scope.toggleStatus
           return name
-        else return altName
+        else
+          return altName
 
       return name
 

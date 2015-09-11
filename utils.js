@@ -24,7 +24,7 @@
           letter = '';
         }
         letter = letter.toLowerCase().replace(/\\s/g, '').replace(/[àáâãäåą]/g, 'a').replace(/æ/g, 'ae').replace(/[çć]/g, 'c').replace(/[èéêëę]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/ł/g, 'l').replace(/ñń/g, 'n').replace(/[òóôõöó]/g, 'o').replace(/ś/g, 's').replace(/œ/g, 'oe').replace(/[ùúûü]/g, 'u').replace(/[ýÿ]/g, 'y').replace(/[żź]/g, 'z').replace(/\\W/g, '');
-        return letter + '.';
+        return letter + '_';
       },
       easingFunctions: {
         linear: function(t) {
