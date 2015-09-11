@@ -2,7 +2,7 @@
 (function() {
   var DEFAULT_THEME;
 
-  DEFAULT_THEME = 'indigo';
+  DEFAULT_THEME = 'blue-grey';
 
   angular.module('phoneticsApp', ['ngMaterial', 'angularRipple']).config(function($sceDelegateProvider, $locationProvider, $mdThemingProvider) {
     var j, len, results1, t, themes;
@@ -349,11 +349,12 @@
       link: function(scope, el, attr) {
         var calculateHeight, debouncedCalculate;
         calculateHeight = function() {
-          var idx, minHeight, ref;
-          minHeight = Math.max(measurer.getViewPortHeight(), el[0].clientHeight);
+          var clientHeight, idx, minHeight, ref, ref1;
+          clientHeight = ((ref = el.find('md-grid-list')[0]) != null ? ref : el[0]).clientHeight;
+          minHeight = Math.max(measurer.getViewPortHeight(), clientHeight);
           if (attr.lastHeight !== minHeight) {
             attr.$set('lastHeight', minHeight);
-            idx = (ref = scope.lang) != null ? ref.code : void 0;
+            idx = (ref1 = scope.lang) != null ? ref1.code : void 0;
             if (!idx && scope.langs) {
               idx = 'langs';
             }
@@ -367,7 +368,6 @@
         scope.setMinHeight = calculateHeight;
         debouncedCalculate = utils.debounce(100, calculateHeight);
         return angular.element($window).bind('resize', function() {
-          el.css('min-height', '0px');
           return debouncedCalculate();
         });
       }

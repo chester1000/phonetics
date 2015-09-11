@@ -35,28 +35,29 @@
     </md-toolbar>
 
     <md-content>
-      <md-grid-list
-        a-panel
-        md-cols-sm="4"
-        md-cols-md="6"
-        md-cols-lg="8"
-        md-cols-gt-lg="10"
-        md-row-height="1:1"
-        md-gutter="0px"
-        md-on-layout="setMinHeight()">
+      <div id="langs" a-panel>
+        <md-grid-list
+          md-cols-sm="4"
+          md-cols-md="6"
+          md-cols-lg="8"
+          md-cols-gt-lg="10"
+          md-row-height="1:1"
+          md-gutter="0px"
+          md-on-layout="setMinHeight()">
 
-        <md-grid-tile
-          ng-repeat="lang in langs"
-          md-rowspan="2"
-          md-colspan="2"
-          class="md-title"
-          style="background-color: {{ lang.color }}">
-            <a href="#{{ lang.code }}"
-              angular-ripple
-              title="{{ lang.originalName || lang.name }}"
-              class="lang-name">{{ lang.name }}</a>
-        </md-grid-tile>
-      </md-grid-list>
+          <md-grid-tile
+            ng-repeat="lang in langs"
+            md-rowspan="2"
+            md-colspan="2"
+            class="md-title"
+            style="background-color: {{ lang.color }}">
+              <a href="#{{ lang.code }}"
+                angular-ripple
+                title="{{ lang.originalName || lang.name }}"
+                class="lang-name">{{ lang.name }}</a>
+          </md-grid-tile>
+        </md-grid-list>
+      </div>
 
       <div id="{{lang.code}}"
         a-panel

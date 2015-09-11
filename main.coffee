@@ -1,4 +1,4 @@
-DEFAULT_THEME = 'indigo'
+DEFAULT_THEME = 'blue-grey'
 
 angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
   .config ($sceDelegateProvider, $locationProvider, $mdThemingProvider) ->
@@ -250,9 +250,11 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
     restrict: 'A'
     link: (scope, el, attr) ->
       calculateHeight = ->
-        minHeight = Math.max measurer.getViewPortHeight(), el[0].clientHeight
+        {clientHeight} = el.find('md-grid-list')[0] ? el[0]
+        minHeight = Math.max measurer.getViewPortHeight(), clientHeight
 
         if attr.lastHeight isnt minHeight
+
           attr.$set 'lastHeight', minHeight
 
           idx = scope.lang?.code
@@ -265,6 +267,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
           panels.setHeight idx, minHeight
 
           el.css 'min-height', minHeight + 'px'
+
         return
 
       scope.setMinHeight = calculateHeight
@@ -272,7 +275,6 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       debouncedCalculate = utils.debounce 100, calculateHeight
 
       angular.element($window).bind 'resize', ->
-        el.css 'min-height', '0px'
         debouncedCalculate()
 
   .directive 'snap', ($window, utils, measurer) ->
