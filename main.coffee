@@ -108,7 +108,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
 
       getCurrent: -> @current
       setCurrent: (newCurrent) ->
-        if newCurrent isnt @current
+        if @panels.length > 0 and newCurrent isnt @current
           @current = newCurrent
           cb @current, @getInfo(@current).toggle for cb in _changeListeners
 
@@ -122,7 +122,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       getCurrentLabel: (state) ->
         return "loading..." if @panels.length is 0
 
-        tmpLabels = @getInfo(@current).labels
+        tmpLabels = @getInfo(@current)?.labels
         return switch true
           when not tmpLabels then null
           when tmpLabels.length is 1 then tmpLabels[0]
@@ -131,6 +131,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       cacheToggleStatus: (state) -> @getInfo(@current).toggle = state
 
       getAll: -> @panels
+      getLastId: -> return i for v, i in @panels when v.name is 'about'
 
       onChange: (callback) ->
         _changeListeners.push callback
@@ -169,7 +170,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
 
             break
 
-        panels.setCurrent _guessedPanel
+        panels.setCurrent _guessedPanel if _guessedPanel isnt null
 
         scrollToPoint
 
@@ -188,12 +189,16 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
     panels.onChange (newGridIdx, toggleStatus) ->
       $scope.toggleStatus = toggleStatus
 
-      if newGridIdx is 0
-        setStuff DEFAULT_THEME
+      switch newGridIdx
+        when 0
+          setStuff DEFAULT_THEME
 
-      else
-        c = $scope.langs[newGridIdx - 1]
-        setStuff c.palette, c.name
+        when panels.getLastId()
+          setStuff DEFAULT_THEME, ' '
+
+        else
+          c = $scope.langs[newGridIdx - 1]
+          setStuff c.palette, c.name
 
       $scope.$apply()
 
@@ -246,7 +251,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
           scope.playing = false
           scope.$apply()
 
-  .directive 'aPanel', ($window, utils, measurer, panels) ->
+  .directive 'aPanel', ($window, $timeout, utils, measurer, panels) ->
     restrict: 'A'
     link: (scope, el, attr) ->
       calculateHeight = ->
@@ -267,15 +272,14 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
           panels.setHeight idx, minHeight
 
           el.css 'min-height', minHeight + 'px'
+          $window.scrollBy 0, 1
 
         return
 
       scope.setMinHeight = calculateHeight
 
-      debouncedCalculate = utils.debounce 100, calculateHeight
-
-      angular.element($window).bind 'resize', ->
-        debouncedCalculate()
+      angular.element($window).bind 'resize', utils.debounce 100, calculateHeight
+      $timeout calculateHeight
 
   .directive 'snap', ($window, utils, measurer) ->
     (scope, element, attrs) ->

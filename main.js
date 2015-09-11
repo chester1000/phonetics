@@ -143,7 +143,7 @@
 
       Panels.prototype.setCurrent = function(newCurrent) {
         var cb, j, len, results1;
-        if (newCurrent !== this.current) {
+        if (this.panels.length > 0 && newCurrent !== this.current) {
           this.current = newCurrent;
           results1 = [];
           for (j = 0, len = _changeListeners.length; j < len; j++) {
@@ -174,11 +174,11 @@
       };
 
       Panels.prototype.getCurrentLabel = function(state) {
-        var tmpLabels;
+        var ref, tmpLabels;
         if (this.panels.length === 0) {
           return "loading...";
         }
-        tmpLabels = this.getInfo(this.current).labels;
+        tmpLabels = (ref = this.getInfo(this.current)) != null ? ref.labels : void 0;
         switch (true) {
           case !tmpLabels:
             return null;
@@ -195,6 +195,17 @@
 
       Panels.prototype.getAll = function() {
         return this.panels;
+      };
+
+      Panels.prototype.getLastId = function() {
+        var i, j, len, ref, v;
+        ref = this.panels;
+        for (i = j = 0, len = ref.length; j < len; i = ++j) {
+          v = ref[i];
+          if (v.name === 'about') {
+            return i;
+          }
+        }
       };
 
       Panels.prototype.onChange = function(callback) {
@@ -252,7 +263,9 @@
             }
           }
         }
-        panels.setCurrent(_guessedPanel);
+        if (_guessedPanel !== null) {
+          panels.setCurrent(_guessedPanel);
+        }
         return scrollToPoint;
       };
 
@@ -277,11 +290,16 @@
     panels.onChange(function(newGridIdx, toggleStatus) {
       var c;
       $scope.toggleStatus = toggleStatus;
-      if (newGridIdx === 0) {
-        setStuff(DEFAULT_THEME);
-      } else {
-        c = $scope.langs[newGridIdx - 1];
-        setStuff(c.palette, c.name);
+      switch (newGridIdx) {
+        case 0:
+          setStuff(DEFAULT_THEME);
+          break;
+        case panels.getLastId():
+          setStuff(DEFAULT_THEME, ' ');
+          break;
+        default:
+          c = $scope.langs[newGridIdx - 1];
+          setStuff(c.palette, c.name);
       }
       return $scope.$apply();
     });
@@ -343,11 +361,11 @@
         });
       }
     };
-  }).directive('aPanel', function($window, utils, measurer, panels) {
+  }).directive('aPanel', function($window, $timeout, utils, measurer, panels) {
     return {
       restrict: 'A',
       link: function(scope, el, attr) {
-        var calculateHeight, debouncedCalculate;
+        var calculateHeight;
         calculateHeight = function() {
           var clientHeight, idx, minHeight, ref, ref1;
           clientHeight = ((ref = el.find('md-grid-list')[0]) != null ? ref : el[0]).clientHeight;
@@ -363,13 +381,12 @@
             }
             panels.setHeight(idx, minHeight);
             el.css('min-height', minHeight + 'px');
+            $window.scrollBy(0, 1);
           }
         };
         scope.setMinHeight = calculateHeight;
-        debouncedCalculate = utils.debounce(100, calculateHeight);
-        return angular.element($window).bind('resize', function() {
-          return debouncedCalculate();
-        });
+        angular.element($window).bind('resize', utils.debounce(100, calculateHeight));
+        return $timeout(calculateHeight);
       }
     };
   }).directive('snap', function($window, utils, measurer) {
@@ -398,3 +415,5 @@
   });
 
 }).call(this);
+
+//# sourceMappingURL=main.js.map

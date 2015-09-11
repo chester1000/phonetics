@@ -1,2 +1,3 @@
 parseSecrets.json
 node_modules
+*.map
