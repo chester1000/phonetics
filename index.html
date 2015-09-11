@@ -30,7 +30,7 @@
       <div class="md-toolbar-tools">
         <h2>{{title || "Choose one"}}</h2>
         <span flex></span>
-        <md-switch ng-model="soundNameInstead">{{soundNameInstead ? 'name' : 'sound'}}</md-switch>
+        <md-switch ng-model="toggleStatus" ng-change="notifyChange()" ng-show="!!getToggleLabel()">{{ getToggleLabel() || "disabled"}}</md-switch>
       </div>
     </md-toolbar>
 
@@ -50,8 +50,11 @@
           md-rowspan="2"
           md-colspan="2"
           class="md-title"
-          style="background-color: {{lang.color}}">
-            <a angular-ripple href="#{{lang.code}}" class="lang-name">{{ lang.name }}</a>
+          style="background-color: {{ lang.color }}">
+            <a href="#{{ lang.code }}"
+              angular-ripple
+              title="{{ lang.originalName || lang.name }}"
+              class="lang-name">{{ lang.name }}</a>
         </md-grid-tile>
       </md-grid-list>
 
@@ -71,17 +74,17 @@
           md-gutter="0px"
           md-on-layout="setMinHeight()">
 
-          <md-grid-tile a-sound ng-repeat="s in sounds | orderBy:normalizedSoundName">
-            <audio ng-src="{{soundNameInstead ? s.soundName || s.sound : s.sound || s.soundName}}" preload="auto"></audio>
+          <md-grid-tile a-sound ng-repeat="s in sounds | filter:toggleFilter | orderBy:normalizedSoundName">
+            <audio ng-src="{{toggleStatus ? s.soundName || s.sound : s.sound || s.soundName}}" preload="auto"></audio>
             <a angular-ripple
               href="#{{lang.code}}_{{s.name}}"
-              ng-class="(soundNameInstead && !s.soundName) || (!soundNameInstead && !s.sound) ? 'disabled' : ''"
-              class="md-display-3 letter">{{ s.altNames[0] || s.name }}</a>
+              class="md-display-3 letter">{{ getSoundLabel(s.name, s.altNames[0]) }}</a>
 
           </md-grid-tile>
 
         </md-grid-list>
       </div>
+
     </md-content>
 
     <script>

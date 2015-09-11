@@ -37,7 +37,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
         .primaryPalette t.primary
         .accentPalette  t.accent
 
-  .service 'ParseServ', (utils) ->
+  .factory 'ParseServ', (utils) ->
     Parse.initialize 'BdvYraypXe3U33UV5mGBRgPmqC2xUyPoP54QgkML', 'kY4MCB6NyGtXjEY6TeAtFWr1zhLv377L3HIiBbas'
 
     Langs   = Parse.Object.extend 'Languages'
@@ -54,6 +54,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
             name:         r.get 'name'
             originalName: r.get 'originalName'
             code:         r.get 'code'
+            toggleLabel:  r.get 'toggleLabel'
             palette:      palette
             color:        utils.getColor palette, 'A200'
 
@@ -81,67 +82,101 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
           cb err, []
     @
 
-  .service 'measurer', ($window) ->
-    _panelChangeListeners = []
+  .factory 'panels', ->
+    new class Panels
+      _changeListeners = []
+      _defaultHeight = 0
 
-    panels = []
-    currentPanel = 0
+      current: 0
+      panels: []
 
-    getToolbarHeight: -> 64
-    getWindowHeight: -> $window.innerHeight
-    getViewPortHeight: -> @getWindowHeight() - @getToolbarHeight()
-    onPanelChange: (callback) -> _panelChangeListeners.push callback
+      constructor: ->
+      init: (@panels) ->
+        @panels.unshift
+          name: 'langs'
+          toggle: off
+          height: _defaultHeight
 
-    initPanels: (pre) ->
-      pre.unshift
-        name: 'langs'
-        height: @getViewPortHeight()
+        @panels.push
+          name: 'about'
+          toggle: off
+          height: _defaultHeight
 
-      # pre.push
-      #   name: 'about'
-      #   height: @getViewPortHeight()
+      setDefaultHeight: (defaultHeight) -> _defaultHeight = defaultHeight
+      setHeight: (name, height) ->
+        s.height = height for s in @panels when s.name is name
 
-      panels = pre
+      getCurrent: -> @current
+      setCurrent: (newCurrent) ->
+        if newCurrent isnt @current
+          @current = newCurrent
+          cb @current, @getInfo(@current).toggle for cb in _changeListeners
 
-    setSize: (name, height) -> s.height = height for s in panels when s.name is name
-    getBreakPoints: -> panels.reduce ((p, c, i) -> p.push c.height + p[i]; p), [0]
-    getCurrentPanelInfo: ->
-      _guessedPanel = null
-      scrollToPoint = false
+      getInfo: (panelId) -> @panels[panelId]
+      getBreakPoints: -> @panels.reduce ((p, c, i) -> p.push c.height + p[i]; p), [0]
 
-      top     = $window.scrollY
-      bottom  = top + @getViewPortHeight()
+      getCurrentLang: ->
+        return null if @panels[@current].name in ['langs', 'about']
+        return @current - 1
 
-      breakpoints = @getBreakPoints()
-      for b, i in breakpoints when i + 1 < breakpoints.length
-        if top >= b and bottom <= breakpoints[i + 1]
-          _guessedPanel = i
-          break
+      getCurrentLabel: (state) ->
+        return "loading..." if @panels.length is 0
 
-        else if top < b and bottom > b
-          screenMiddle = top + @getViewPortHeight() / 2
-          if screenMiddle < b
-            _guessedPanel = i - 1
+        tmpLabels = @getInfo(@current).labels
+        return switch true
+          when not tmpLabels then null
+          when tmpLabels.length is 1 then tmpLabels[0]
+          else tmpLabels[+state]
 
-            scrollToPoint = breakpoints[_guessedPanel]
-            if panels[i - 1].height > @getViewPortHeight()
-              scrollToPoint = breakpoints[i] - @getViewPortHeight()
+      cacheToggleStatus: (state) -> @getInfo(@current).toggle = state
 
-          else if screenMiddle >= b
+      getAll: -> @panels
+
+      onChange: (callback) ->
+        _changeListeners.push callback
+
+  .factory 'measurer', ($window, panels) ->
+    new class Measurer
+      constructor: -> panels.setDefaultHeight @getViewPortHeight()
+      getToolbarHeight: -> 64
+      getWindowHeight: -> $window.innerHeight
+      getViewPortHeight: -> @getWindowHeight() - @getToolbarHeight()
+      getCurrentPanelInfo: ->
+        _guessedPanel = null
+        scrollToPoint = false
+
+        top     = $window.scrollY
+        bottom  = top + @getViewPortHeight()
+
+        breakpoints = panels.getBreakPoints()
+        for b, i in breakpoints when i + 1 < breakpoints.length
+          if top >= b and bottom <= breakpoints[i + 1]
             _guessedPanel = i
-            scrollToPoint = breakpoints[i]
+            break
 
-          break
+          else if top < b and bottom > b
+            screenMiddle = top + @getViewPortHeight() / 2
+            if screenMiddle < b
+              _guessedPanel = i - 1
 
-      if _guessedPanel isnt currentPanel
-        currentPanel = _guessedPanel
-        cb currentPanel for cb in _panelChangeListeners
+              scrollToPoint = breakpoints[_guessedPanel]
+              if panels.getInfo(i - 1).height > @getViewPortHeight()
+                scrollToPoint = breakpoints[i] - @getViewPortHeight()
 
-      scrollToPoint
+            else if screenMiddle >= b
+              _guessedPanel = i
+              scrollToPoint = breakpoints[i]
 
-  .controller 'LangCtrl', ($scope, ParseServ, measurer, utils, $rootScope) ->
+            break
 
-    $scope.soundNameInstead = false
+        panels.setCurrent _guessedPanel
+
+        scrollToPoint
+
+  .controller 'LangCtrl', ($scope, $rootScope, ParseServ, panels, utils) ->
+    $scope.toggleStatus = false
+    $scope.notifyChange   = -> panels.cacheToggleStatus $scope.toggleStatus
+    $scope.getToggleLabel = -> panels.getCurrentLabel   $scope.toggleStatus
 
     setStuff = (theme, title) ->
       $scope.title = title
@@ -150,7 +185,9 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
 
     setStuff DEFAULT_THEME
 
-    measurer.onPanelChange (newGridIdx) ->
+    panels.onChange (newGridIdx, toggleStatus) ->
+      $scope.toggleStatus = toggleStatus
+
       if newGridIdx is 0
         setStuff DEFAULT_THEME
 
@@ -161,14 +198,32 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       $scope.$apply()
 
     ParseServ.getLangs (err, langs) ->
-      measurer.initPanels
-        name: v.code for v in langs
+      panels.init langs.map (l) ->
+        name: l.code
+        toggle: off
+        labels: l.toggleLabel
 
       $scope.langs = langs
       $scope.$apply()
 
   .controller 'SoundBoardCtrl', ($scope, ParseServ, utils) ->
     $scope.normalizedSoundName = (sound) -> utils.normalize sound.name
+    $scope.toggleFilter = (sound) ->
+      if $scope.lang?.code is 'pl'
+        return $scope.toggleStatus or sound.name.length is 1
+
+      if $scope.lang?.code is 'en'
+        console.log sound
+
+      return true
+
+    $scope.getSoundLabel = (name, altName) ->
+      if $scope.lang?.code is 'bopo'
+        unless $scope.toggleStatus
+          return name
+        else return altName
+
+      return name
 
     lang = new Parse.Object 'Languages'
     lang.id = $scope.lang.id
@@ -190,7 +245,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
           scope.playing = false
           scope.$apply()
 
-  .directive 'aPanel', (measurer, $window, utils) ->
+  .directive 'aPanel', ($window, utils, measurer, panels) ->
     restrict: 'A'
     link: (scope, el, attr) ->
       calculateHeight = ->
@@ -206,7 +261,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
 
           idx ?= 'about'
 
-          measurer.setSize idx, minHeight
+          panels.setHeight idx, minHeight
 
           el.css 'min-height', minHeight + 'px'
         return

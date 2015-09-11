@@ -36,7 +36,7 @@
       results1.push($mdThemingProvider.theme(t.primary).primaryPalette(t.primary).accentPalette(t.accent));
     }
     return results1;
-  }).service('ParseServ', function(utils) {
+  }).factory('ParseServ', function(utils) {
     var Langs, Sounds;
     Parse.initialize('BdvYraypXe3U33UV5mGBRgPmqC2xUyPoP54QgkML', 'kY4MCB6NyGtXjEY6TeAtFWr1zhLv377L3HIiBbas');
     Langs = Parse.Object.extend('Languages');
@@ -54,6 +54,7 @@
               name: r.get('name'),
               originalName: r.get('originalName'),
               code: r.get('code'),
+              toggleLabel: r.get('toggleLabel'),
               palette: palette,
               color: utils.getColor(palette, 'A200')
             };
@@ -90,55 +91,145 @@
       });
     };
     return this;
-  }).service('measurer', function($window) {
-    var _panelChangeListeners, currentPanel, panels;
-    _panelChangeListeners = [];
-    panels = [];
-    currentPanel = 0;
-    return {
-      getToolbarHeight: function() {
-        return 64;
-      },
-      getWindowHeight: function() {
-        return $window.innerHeight;
-      },
-      getViewPortHeight: function() {
-        return this.getWindowHeight() - this.getToolbarHeight();
-      },
-      onPanelChange: function(callback) {
-        return _panelChangeListeners.push(callback);
-      },
-      initPanels: function(pre) {
-        pre.unshift({
+  }).factory('panels', function() {
+    var Panels;
+    return new (Panels = (function() {
+      var _changeListeners, _defaultHeight;
+
+      _changeListeners = [];
+
+      _defaultHeight = 0;
+
+      Panels.prototype.current = 0;
+
+      Panels.prototype.panels = [];
+
+      function Panels() {}
+
+      Panels.prototype.init = function(panels1) {
+        this.panels = panels1;
+        this.panels.unshift({
           name: 'langs',
-          height: this.getViewPortHeight()
+          toggle: false,
+          height: _defaultHeight
         });
-        return panels = pre;
-      },
-      setSize: function(name, height) {
-        var j, len, results1, s;
+        return this.panels.push({
+          name: 'about',
+          toggle: false,
+          height: _defaultHeight
+        });
+      };
+
+      Panels.prototype.setDefaultHeight = function(defaultHeight) {
+        return _defaultHeight = defaultHeight;
+      };
+
+      Panels.prototype.setHeight = function(name, height) {
+        var j, len, ref, results1, s;
+        ref = this.panels;
         results1 = [];
-        for (j = 0, len = panels.length; j < len; j++) {
-          s = panels[j];
+        for (j = 0, len = ref.length; j < len; j++) {
+          s = ref[j];
           if (s.name === name) {
             results1.push(s.height = height);
           }
         }
         return results1;
-      },
-      getBreakPoints: function() {
-        return panels.reduce((function(p, c, i) {
+      };
+
+      Panels.prototype.getCurrent = function() {
+        return this.current;
+      };
+
+      Panels.prototype.setCurrent = function(newCurrent) {
+        var cb, j, len, results1;
+        if (newCurrent !== this.current) {
+          this.current = newCurrent;
+          results1 = [];
+          for (j = 0, len = _changeListeners.length; j < len; j++) {
+            cb = _changeListeners[j];
+            results1.push(cb(this.current, this.getInfo(this.current).toggle));
+          }
+          return results1;
+        }
+      };
+
+      Panels.prototype.getInfo = function(panelId) {
+        return this.panels[panelId];
+      };
+
+      Panels.prototype.getBreakPoints = function() {
+        return this.panels.reduce((function(p, c, i) {
           p.push(c.height + p[i]);
           return p;
         }), [0]);
-      },
-      getCurrentPanelInfo: function() {
-        var _guessedPanel, b, bottom, breakpoints, cb, i, j, k, len, len1, screenMiddle, scrollToPoint, top;
+      };
+
+      Panels.prototype.getCurrentLang = function() {
+        var ref;
+        if ((ref = this.panels[this.current].name) === 'langs' || ref === 'about') {
+          return null;
+        }
+        return this.current - 1;
+      };
+
+      Panels.prototype.getCurrentLabel = function(state) {
+        var tmpLabels;
+        if (this.panels.length === 0) {
+          return "loading...";
+        }
+        tmpLabels = this.getInfo(this.current).labels;
+        switch (true) {
+          case !tmpLabels:
+            return null;
+          case tmpLabels.length === 1:
+            return tmpLabels[0];
+          default:
+            return tmpLabels[+state];
+        }
+      };
+
+      Panels.prototype.cacheToggleStatus = function(state) {
+        return this.getInfo(this.current).toggle = state;
+      };
+
+      Panels.prototype.getAll = function() {
+        return this.panels;
+      };
+
+      Panels.prototype.onChange = function(callback) {
+        return _changeListeners.push(callback);
+      };
+
+      return Panels;
+
+    })());
+  }).factory('measurer', function($window, panels) {
+    var Measurer;
+    return new (Measurer = (function() {
+      function Measurer() {
+        panels.setDefaultHeight(this.getViewPortHeight());
+      }
+
+      Measurer.prototype.getToolbarHeight = function() {
+        return 64;
+      };
+
+      Measurer.prototype.getWindowHeight = function() {
+        return $window.innerHeight;
+      };
+
+      Measurer.prototype.getViewPortHeight = function() {
+        return this.getWindowHeight() - this.getToolbarHeight();
+      };
+
+      Measurer.prototype.getCurrentPanelInfo = function() {
+        var _guessedPanel, b, bottom, breakpoints, i, j, len, screenMiddle, scrollToPoint, top;
         _guessedPanel = null;
         scrollToPoint = false;
         top = $window.scrollY;
         bottom = top + this.getViewPortHeight();
-        breakpoints = this.getBreakPoints();
+        breakpoints = panels.getBreakPoints();
         for (i = j = 0, len = breakpoints.length; j < len; i = ++j) {
           b = breakpoints[i];
           if (i + 1 < breakpoints.length) {
@@ -150,7 +241,7 @@
               if (screenMiddle < b) {
                 _guessedPanel = i - 1;
                 scrollToPoint = breakpoints[_guessedPanel];
-                if (panels[i - 1].height > this.getViewPortHeight()) {
+                if (panels.getInfo(i - 1).height > this.getViewPortHeight()) {
                   scrollToPoint = breakpoints[i] - this.getViewPortHeight();
                 }
               } else if (screenMiddle >= b) {
@@ -161,27 +252,31 @@
             }
           }
         }
-        if (_guessedPanel !== currentPanel) {
-          currentPanel = _guessedPanel;
-          for (k = 0, len1 = _panelChangeListeners.length; k < len1; k++) {
-            cb = _panelChangeListeners[k];
-            cb(currentPanel);
-          }
-        }
+        panels.setCurrent(_guessedPanel);
         return scrollToPoint;
-      }
-    };
-  }).controller('LangCtrl', function($scope, ParseServ, measurer, utils, $rootScope) {
+      };
+
+      return Measurer;
+
+    })());
+  }).controller('LangCtrl', function($scope, $rootScope, ParseServ, panels, utils) {
     var setStuff;
-    $scope.soundNameInstead = false;
+    $scope.toggleStatus = false;
+    $scope.notifyChange = function() {
+      return panels.cacheToggleStatus($scope.toggleStatus);
+    };
+    $scope.getToggleLabel = function() {
+      return panels.getCurrentLabel($scope.toggleStatus);
+    };
     setStuff = function(theme, title) {
       $scope.title = title;
       $scope.dynamicTheme = theme;
       return $rootScope.currentThemeColor = utils.getColor(theme);
     };
     setStuff(DEFAULT_THEME);
-    measurer.onPanelChange(function(newGridIdx) {
+    panels.onChange(function(newGridIdx, toggleStatus) {
       var c;
+      $scope.toggleStatus = toggleStatus;
       if (newGridIdx === 0) {
         setStuff(DEFAULT_THEME);
       } else {
@@ -191,18 +286,13 @@
       return $scope.$apply();
     });
     return ParseServ.getLangs(function(err, langs) {
-      var v;
-      measurer.initPanels((function() {
-        var j, len, results1;
-        results1 = [];
-        for (j = 0, len = langs.length; j < len; j++) {
-          v = langs[j];
-          results1.push({
-            name: v.code
-          });
-        }
-        return results1;
-      })());
+      panels.init(langs.map(function(l) {
+        return {
+          name: l.code,
+          toggle: false,
+          labels: l.toggleLabel
+        };
+      }));
       $scope.langs = langs;
       return $scope.$apply();
     });
@@ -210,6 +300,27 @@
     var lang;
     $scope.normalizedSoundName = function(sound) {
       return utils.normalize(sound.name);
+    };
+    $scope.toggleFilter = function(sound) {
+      var ref, ref1;
+      if (((ref = $scope.lang) != null ? ref.code : void 0) === 'pl') {
+        return $scope.toggleStatus || sound.name.length === 1;
+      }
+      if (((ref1 = $scope.lang) != null ? ref1.code : void 0) === 'en') {
+        console.log(sound);
+      }
+      return true;
+    };
+    $scope.getSoundLabel = function(name, altName) {
+      var ref;
+      if (((ref = $scope.lang) != null ? ref.code : void 0) === 'bopo') {
+        if (!$scope.toggleStatus) {
+          return name;
+        } else {
+          return altName;
+        }
+      }
+      return name;
     };
     lang = new Parse.Object('Languages');
     lang.id = $scope.lang.id;
@@ -235,7 +346,7 @@
         });
       }
     };
-  }).directive('aPanel', function(measurer, $window, utils) {
+  }).directive('aPanel', function($window, utils, measurer, panels) {
     return {
       restrict: 'A',
       link: function(scope, el, attr) {
@@ -252,7 +363,7 @@
             if (idx == null) {
               idx = 'about';
             }
-            measurer.setSize(idx, minHeight);
+            panels.setHeight(idx, minHeight);
             el.css('min-height', minHeight + 'px');
           }
         };
