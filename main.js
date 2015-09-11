@@ -387,6 +387,14 @@
         return debouncedScroll();
       });
     };
+  }).directive('preventPopups', function() {
+    return function(scope, element, attr) {
+      return element.bind('contextmenu', function(e) {
+        return scope.$apply(function() {
+          return e.preventDefault();
+        });
+      });
+    };
   });
 
 }).call(this);

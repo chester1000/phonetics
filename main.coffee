@@ -287,3 +287,8 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       angular.element($window).bind 'scroll', ->
         measurer.getCurrentPanelInfo()
         debouncedScroll()
+
+  .directive 'preventPopups', ->
+    (scope, element, attr) ->
+      element.bind 'contextmenu', (e) ->
+        scope.$apply -> e.preventDefault()
