@@ -74,6 +74,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
             soundNameUrl = soundName?.url()
 
             name:       r.get 'name'
+            meta:       r.get 'meta'
             altNames:   r.get 'altNames'
             sound:      soundUrl
             soundName:  soundNameUrl
@@ -175,9 +176,12 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
         scrollToPoint
 
   .controller 'LangCtrl', ($scope, $rootScope, ParseServ, panels, utils) ->
+    $scope.isLastPanel = false
+
     $scope.toggleStatus = false
     $scope.notifyChange   = -> panels.cacheToggleStatus $scope.toggleStatus
     $scope.getToggleLabel = -> panels.getCurrentLabel   $scope.toggleStatus
+
 
     setStuff = (theme, title) ->
       $scope.title = title
@@ -188,6 +192,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
 
     panels.onChange (newGridIdx, toggleStatus) ->
       $scope.toggleStatus = toggleStatus
+      $scope.isLastPanel = false
 
       switch newGridIdx
         when 0
@@ -195,6 +200,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
 
         when panels.getLastId()
           setStuff DEFAULT_THEME, ' '
+          $scope.isLastPanel = true
 
         else
           c = $scope.langs[newGridIdx - 1]
@@ -217,8 +223,11 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       if $scope.lang?.code is 'pl'
         return $scope.toggleStatus or sound.name.length is 1
 
-      # if $scope.lang?.code is 'en'
-      #   console.log sound
+      if $scope.lang?.code is 'en'
+        if $scope.toggleStatus
+          return sound.meta is 'p'
+        else
+          return sound.meta isnt 'p'
 
       return true
 

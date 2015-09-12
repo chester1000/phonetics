@@ -79,6 +79,7 @@
             soundNameUrl = soundName != null ? soundName.url() : void 0;
             return {
               name: r.get('name'),
+              meta: r.get('meta'),
               altNames: r.get('altNames'),
               sound: soundUrl,
               soundName: soundNameUrl
@@ -274,6 +275,7 @@
     })());
   }).controller('LangCtrl', function($scope, $rootScope, ParseServ, panels, utils) {
     var setStuff;
+    $scope.isLastPanel = false;
     $scope.toggleStatus = false;
     $scope.notifyChange = function() {
       return panels.cacheToggleStatus($scope.toggleStatus);
@@ -290,12 +292,14 @@
     panels.onChange(function(newGridIdx, toggleStatus) {
       var c;
       $scope.toggleStatus = toggleStatus;
+      $scope.isLastPanel = false;
       switch (newGridIdx) {
         case 0:
           setStuff(DEFAULT_THEME);
           break;
         case panels.getLastId():
           setStuff(DEFAULT_THEME, ' ');
+          $scope.isLastPanel = true;
           break;
         default:
           c = $scope.langs[newGridIdx - 1];
@@ -320,9 +324,16 @@
       return utils.normalize(sound.name);
     };
     $scope.toggleFilter = function(sound) {
-      var ref;
+      var ref, ref1;
       if (((ref = $scope.lang) != null ? ref.code : void 0) === 'pl') {
         return $scope.toggleStatus || sound.name.length === 1;
+      }
+      if (((ref1 = $scope.lang) != null ? ref1.code : void 0) === 'en') {
+        if ($scope.toggleStatus) {
+          return sound.meta === 'p';
+        } else {
+          return sound.meta !== 'p';
+        }
       }
       return true;
     };
