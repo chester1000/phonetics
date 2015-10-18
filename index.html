@@ -26,6 +26,11 @@
     <script src="utils.js"></script>
   </head>
   <body ng-controller="LangCtrl" prevent-popups md-theme="{{ dynamicTheme }}" snap>
+    <div id="loader">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      <span>Loading languages...</span>
+    </div>
+
     <md-toolbar scroll>
       <div class="md-toolbar-tools">
         <h2>{{title || "Choose one"}}</h2>
@@ -86,31 +91,30 @@
         </md-grid-list>
       </div>
 
-    </md-content>
+      <div id="about" a-panel layout="column">
+        <header layout="row" layout-align="center center">
+          <h1>Made with love by</h1>
+        </header>
+        <div layout="row" flex layout-sm="column">
+          <div flex layout="column" layout-align="center center" id="authorDM">
+            <img class="avatar" src="http://vignette2.wikia.nocookie.net/someordinarygamers/images/9/9c/Tricko-meme-poker-face-panske.jpg/revision/latest?cb=20150225224638" />
+            <header>
+              <h2>Damian Mee</h2>
+              <h4><i>Works</i> and stuff</h4>
+            </header>
+          </div>
 
-    <div id="about" a-panel layout="column">
-      <header layout="row" layout-align="center center">
-        <h1>Made with love by</h1>
-      </header>
-      <div layout="row" flex layout-sm="column">
-        <div flex layout="column" layout-align="center center" id="authorDM">
-          <img class="avatar" src="http://vignette2.wikia.nocookie.net/someordinarygamers/images/9/9c/Tricko-meme-poker-face-panske.jpg/revision/latest?cb=20150225224638" />
-          <header>
-            <h2>Damian Mee</h2>
-            <h4><i>Works</i> and stuff</h4>
-          </header>
+          <div flex layout="column" layout-align="center center" id="authorAK">
+            <img class="avatar" src="http://www.garderoba.si/image/cache/data/MAJICE_GARDEROBA.si/D/derpina-happy-KVADRAT-600x600.png" />
+            <header>
+              <h2>Ai Kordek</h2>
+              <h4>Looks and stuff</h4>
+            </header>
+          </div>
         </div>
 
-        <div flex layout="column" layout-align="center center" id="authorAK">
-          <img class="avatar" src="http://www.garderoba.si/image/cache/data/MAJICE_GARDEROBA.si/D/derpina-happy-KVADRAT-600x600.png" />
-          <header>
-            <h2>Ai Kordek</h2>
-            <h4>Looks and stuff</h4>
-          </header>
-        </div>
       </div>
-
-    </div>
+    </md-content>
 
     <script>
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
