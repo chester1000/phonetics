@@ -67,7 +67,7 @@
       <div id="{{lang.code}}"
         a-panel
         ng-controller="SoundBoardCtrl"
-        ng-repeat="lang in langs"
+        ng-repeat="(idx, lang) in langs"
 
         style="background-color: {{lang.color}}">
 

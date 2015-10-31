@@ -194,6 +194,10 @@
         return this.getInfo(this.current).toggle = state;
       };
 
+      Panels.prototype.getToggleFor = function(idx) {
+        return this.getInfo(idx).toggle;
+      };
+
       Panels.prototype.getAll = function() {
         return this.panels;
       };
@@ -318,18 +322,19 @@
       $scope.langs = langs;
       return $scope.$apply();
     });
-  }).controller('SoundBoardCtrl', function($scope, ParseServ, utils) {
+  }).controller('SoundBoardCtrl', function($scope, ParseServ, utils, panels) {
     var lang;
     $scope.normalizedSoundName = function(sound) {
       return utils.normalize(sound.name);
     };
     $scope.toggleFilter = function(sound) {
-      var _ref, _ref1;
+      var toggleStatus, _ref, _ref1;
+      toggleStatus = panels.getToggleFor($scope.idx + 1);
       if (((_ref = $scope.lang) != null ? _ref.code : void 0) === 'pl') {
-        return $scope.toggleStatus || sound.name.length === 1;
+        return toggleStatus || sound.name.length === 1;
       }
       if (((_ref1 = $scope.lang) != null ? _ref1.code : void 0) === 'en') {
-        if ($scope.toggleStatus) {
+        if (toggleStatus) {
           return sound.meta === 'p';
         } else {
           return sound.meta !== 'p';
@@ -338,9 +343,10 @@
       return true;
     };
     $scope.getSoundLabel = function(name, altName) {
-      var _ref;
+      var toggleStatus, _ref;
+      toggleStatus = panels.getToggleFor($scope.idx + 1);
       if (((_ref = $scope.lang) != null ? _ref.code : void 0) === 'bopo') {
-        if (!$scope.toggleStatus) {
+        if (!toggleStatus) {
           return name;
         } else {
           return altName;

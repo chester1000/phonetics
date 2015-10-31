@@ -130,6 +130,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
           else tmpLabels[+state]
 
       cacheToggleStatus: (state) -> @getInfo(@current).toggle = state
+      getToggleFor: (idx) -> @getInfo(idx).toggle
 
       getAll: -> @panels
       getLastId: -> return i for v, i in @panels when v.name is 'about'
@@ -217,14 +218,16 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       $scope.langs = langs
       $scope.$apply()
 
-  .controller 'SoundBoardCtrl', ($scope, ParseServ, utils) ->
+  .controller 'SoundBoardCtrl', ($scope, ParseServ, utils, panels) ->
     $scope.normalizedSoundName = (sound) -> utils.normalize sound.name
     $scope.toggleFilter = (sound) ->
+      toggleStatus = panels.getToggleFor $scope.idx + 1
+
       if $scope.lang?.code is 'pl'
-        return $scope.toggleStatus or sound.name.length is 1
+        return toggleStatus or sound.name.length is 1
 
       if $scope.lang?.code is 'en'
-        if $scope.toggleStatus
+        if toggleStatus
           return sound.meta is 'p'
         else
           return sound.meta isnt 'p'
@@ -232,8 +235,10 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       return true
 
     $scope.getSoundLabel = (name, altName) ->
+      toggleStatus = panels.getToggleFor $scope.idx + 1
+
       if $scope.lang?.code is 'bopo'
-        unless $scope.toggleStatus
+        unless toggleStatus
           return name
         else
           return altName
