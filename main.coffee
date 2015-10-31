@@ -4,7 +4,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
   .config ($sceDelegateProvider, $locationProvider, $mdThemingProvider) ->
     $sceDelegateProvider.resourceUrlWhitelist [
       'self'
-      'http://files.parsetfss.com/**'
+      'https://files.parsetfss.com/**'
     ]
 
     $locationProvider.html5Mode true
@@ -68,10 +68,10 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
         success: (results) ->
           cb null, results.map (r) ->
             sound = r.get 'sound'
-            soundUrl = sound?.url()
+            soundUrl = sound?.url()?.replace /^http/, 'https'
 
             soundName = r.get 'soundName'
-            soundNameUrl = soundName?.url()
+            soundNameUrl = soundName?.url()?.replace /^http/, 'https'
 
             name:       r.get 'name'
             meta:       r.get 'meta'
