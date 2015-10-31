@@ -389,7 +389,7 @@
           if (loader) {
             setTimeout((function() {
               return loader.remove();
-            }), 600);
+            }), 1200);
           }
           clientHeight = ((_ref = el.find('md-grid-list')[0]) != null ? _ref : el[0]).clientHeight;
           minHeight = Math.max(measurer.getViewPortHeight(), clientHeight);

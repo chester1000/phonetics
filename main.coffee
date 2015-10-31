@@ -271,7 +271,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       calculateHeight = ->
         loader = document.getElementById 'loader'
         if loader
-          setTimeout (-> loader.remove()), 600
+          setTimeout (-> loader.remove()), 1200
 
         {clientHeight} = el.find('md-grid-list')[0] ? el[0]
         minHeight = Math.max measurer.getViewPortHeight(), clientHeight
