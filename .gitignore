@@ -1,3 +1,5 @@
 parseSecrets.json
 node_modules
+res/**.mp3
+res/**.swf
 *.map
