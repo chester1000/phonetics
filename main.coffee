@@ -41,7 +41,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
     Parse.initialize 'BdvYraypXe3U33UV5mGBRgPmqC2xUyPoP54QgkML', 'kY4MCB6NyGtXjEY6TeAtFWr1zhLv377L3HIiBbas'
 
     Langs   = Parse.Object.extend 'Languages'
-    Sounds  = Parse.Object.extend 'Sounds'
+    Sounds  = Parse.Object.extend 'Sounds2'
 
     @getLangs = (cb) ->
       query = new Parse.Query Langs
@@ -67,17 +67,10 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       query.find
         success: (results) ->
           cb null, results.map (r) ->
-            sound = r.get 'sound'
-            soundUrl = sound?.url()?.replace /^http/, 'https'
-
-            soundName = r.get 'soundName'
-            soundNameUrl = soundName?.url()?.replace /^http/, 'https'
-
-            name:       r.get 'name'
-            meta:       r.get 'meta'
-            altNames:   r.get 'altNames'
-            sound:      soundUrl
-            soundName:  soundNameUrl
+            name:     r.get 'name'
+            type:     r.get 'type'
+            altNames: r.get 'altNames'
+            file:     r.get('file')?.url()?.replace /^http/, 'https'
 
         error: (err) ->
           cb err, []
@@ -227,21 +220,20 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
         return toggleStatus or sound.name.length is 1
 
       if $scope.lang?.code is 'en'
-        if toggleStatus
-          return sound.meta is 'p'
-        else
-          return sound.meta isnt 'p'
+        shouldShow = sound.type is 'phonetic'
+
+        unless toggleStatus
+          shouldShow = not shouldShow
+
+        return shouldShow
 
       return true
 
     $scope.getSoundLabel = (name, altName) ->
       toggleStatus = panels.getToggleFor $scope.idx + 1
 
-      if $scope.lang?.code is 'bopo'
-        unless toggleStatus
-          return name
-        else
-          return altName
+      if $scope.lang?.code is 'bopo' and toggleStatus
+        return altName
 
       return name
 

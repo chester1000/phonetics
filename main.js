@@ -40,7 +40,7 @@
     var Langs, Sounds;
     Parse.initialize('BdvYraypXe3U33UV5mGBRgPmqC2xUyPoP54QgkML', 'kY4MCB6NyGtXjEY6TeAtFWr1zhLv377L3HIiBbas');
     Langs = Parse.Object.extend('Languages');
-    Sounds = Parse.Object.extend('Sounds');
+    Sounds = Parse.Object.extend('Sounds2');
     this.getLangs = function(cb) {
       var query;
       query = new Parse.Query(Langs);
@@ -72,17 +72,12 @@
       return query.find({
         success: function(results) {
           return cb(null, results.map(function(r) {
-            var sound, soundName, soundNameUrl, soundUrl, _ref, _ref1;
-            sound = r.get('sound');
-            soundUrl = sound != null ? (_ref = sound.url()) != null ? _ref.replace(/^http/, 'https') : void 0 : void 0;
-            soundName = r.get('soundName');
-            soundNameUrl = soundName != null ? (_ref1 = soundName.url()) != null ? _ref1.replace(/^http/, 'https') : void 0 : void 0;
+            var _ref, _ref1;
             return {
               name: r.get('name'),
-              meta: r.get('meta'),
+              type: r.get('type'),
               altNames: r.get('altNames'),
-              sound: soundUrl,
-              soundName: soundNameUrl
+              file: (_ref = r.get('file')) != null ? (_ref1 = _ref.url()) != null ? _ref1.replace(/^http/, 'https') : void 0 : void 0
             };
           }));
         },
@@ -328,29 +323,25 @@
       return utils.normalize(sound.name);
     };
     $scope.toggleFilter = function(sound) {
-      var toggleStatus, _ref, _ref1;
+      var shouldShow, toggleStatus, _ref, _ref1;
       toggleStatus = panels.getToggleFor($scope.idx + 1);
       if (((_ref = $scope.lang) != null ? _ref.code : void 0) === 'pl') {
         return toggleStatus || sound.name.length === 1;
       }
       if (((_ref1 = $scope.lang) != null ? _ref1.code : void 0) === 'en') {
-        if (toggleStatus) {
-          return sound.meta === 'p';
-        } else {
-          return sound.meta !== 'p';
+        shouldShow = sound.type === 'phonetic';
+        if (!toggleStatus) {
+          shouldShow = !shouldShow;
         }
+        return shouldShow;
       }
       return true;
     };
     $scope.getSoundLabel = function(name, altName) {
       var toggleStatus, _ref;
       toggleStatus = panels.getToggleFor($scope.idx + 1);
-      if (((_ref = $scope.lang) != null ? _ref.code : void 0) === 'bopo') {
-        if (!toggleStatus) {
-          return name;
-        } else {
-          return altName;
-        }
+      if (((_ref = $scope.lang) != null ? _ref.code : void 0) === 'bopo' && toggleStatus) {
+        return altName;
       }
       return name;
     };
