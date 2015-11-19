@@ -65,19 +65,22 @@
         }
       });
     };
-    this.getSounds = function(langId, cb) {
+    this.getSounds = function(lang, cb) {
       var query;
       query = new Parse.Query(Sounds);
-      query.equalTo('language', langId);
+      query.equalTo('language', lang);
       return query.find({
         success: function(results) {
           return cb(null, results.map(function(r) {
-            var _ref, _ref1;
+            var name, type, _ref, _ref1;
+            name = r.get('name');
+            type = r.get('type');
             return {
-              name: r.get('name'),
-              type: r.get('type'),
+              name: name,
+              type: type,
               altNames: r.get('altNames'),
-              file: (_ref = r.get('file')) != null ? (_ref1 = _ref.url()) != null ? _ref1.replace(/^http/, 'https') : void 0 : void 0
+              parseFile: (_ref = r.get('file')) != null ? (_ref1 = _ref.url()) != null ? _ref1.replace(/^http/, 'https') : void 0 : void 0,
+              localFile: "sounds/" + lang.code + "/" + type + "/" + name + ".mp3"
             };
           }));
         },
@@ -347,6 +350,7 @@
     };
     lang = new Parse.Object('Languages');
     lang.id = $scope.lang.id;
+    lang.code = $scope.lang.code;
     return ParseServ.getSounds(lang, function(err, sounds) {
       $scope.sounds = sounds;
       return $scope.$apply();

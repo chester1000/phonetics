@@ -61,16 +61,20 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
         error: (err) ->
           cb err, []
 
-    @getSounds = (langId, cb) ->
+    @getSounds = (lang, cb) ->
       query = new Parse.Query Sounds
-      query.equalTo 'language', langId
+      query.equalTo 'language', lang
       query.find
         success: (results) ->
           cb null, results.map (r) ->
-            name:     r.get 'name'
-            type:     r.get 'type'
+            name = r.get 'name'
+            type = r.get 'type'
+
+            name:     name
+            type:     type
             altNames: r.get 'altNames'
-            file:     r.get('file')?.url()?.replace /^http/, 'https'
+            parseFile:r.get('file')?.url()?.replace /^http/, 'https'
+            localFile:"sounds/#{lang.code}/#{type}/#{name}.mp3"
 
         error: (err) ->
           cb err, []
@@ -239,6 +243,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
 
     lang = new Parse.Object 'Languages'
     lang.id = $scope.lang.id
+    lang.code = $scope.lang.code
     ParseServ.getSounds lang, (err, sounds) ->
       $scope.sounds = sounds
       $scope.$apply()
