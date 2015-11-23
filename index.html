@@ -81,7 +81,7 @@
           md-on-layout="setMinHeight()">
 
           <md-grid-tile a-sound ng-repeat="s in sounds | filter:toggleFilter | orderBy:normalizedSoundName">
-            <audio ng-src="{{s.parseFile + '?fallback=' + s.localFile}}" preload="auto"></audio>
+            <audio ng-src="{{s.parseFile + '?soundFallback=' + s.localFile}}" preload="auto"></audio>
             <a angular-ripple
               href="#{{lang.code}}_{{s.name}}"
               class="md-display-3 letter">{{ getSoundLabel(s.name, s.altNames[0]) }}</a>
