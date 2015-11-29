@@ -10,16 +10,14 @@
     <meta meta-theme name="theme-color" content="{{ currentThemeColor }}" />
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc4/angular-material.min.css">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc5/angular-material.min.css">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons" />
     <link rel="stylesheet" href="styles.css" />
 
-    <script src="//www.parsecdn.com/js/parse-1.6.7.min.js"></script>
-
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-aria.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc4/angular-material.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.2/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.2/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.2/angular-aria.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc5/angular-material.min.js"></script>
 
     <script src="js/main.js"></script>
     <script src="js/angular-ripple.js"></script>
@@ -81,7 +79,7 @@
           md-on-layout="setMinHeight()">
 
           <md-grid-tile a-sound ng-repeat="s in sounds | filter:toggleFilter | orderBy:normalizedSoundName">
-            <audio ng-src="{{s.parseFile + '?soundFallback=' + s.localFile}}" preload="auto"></audio>
+            <audio ng-src="{{s.file + '?soundFallback=' + s.localFile}}" preload="auto"></audio>
             <a angular-ripple
               href="#{{lang.code}}_{{s.name}}"
               class="md-display-3 letter">{{ getSoundLabel(s.name, s.altNames[0]) }}</a>

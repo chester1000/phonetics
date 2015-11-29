@@ -37,48 +37,49 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
         .primaryPalette t.primary
         .accentPalette  t.accent
 
-  .factory 'ParseServ', (utils) ->
-    Parse.initialize 'BdvYraypXe3U33UV5mGBRgPmqC2xUyPoP54QgkML', 'kY4MCB6NyGtXjEY6TeAtFWr1zhLv377L3HIiBbas'
+  .factory 'ParseServ', (utils, $http) ->
+    cbs = {}
+    langs = null
+    sounds = null
 
-    Langs   = Parse.Object.extend 'Languages'
-    Sounds  = Parse.Object.extend 'Sounds2'
+    processSounds = (data) ->
+      data.reduce (langs, lang) ->
+        langs[lang.code] = lang.items.map (sound) ->
+          sound.localFile = "sounds/#{lang.code}/#{sound.type}/#{sound.name}.mp3"
+          sound
+        langs
+      , {}
 
-    @getLangs = (cb) ->
-      query = new Parse.Query Langs
-      query.find
-        success: (results) ->
-          cb null, results.map (r) ->
-            palette = r.get 'palette'
+    processLangs = (data) ->
+      data.map (lang) ->
+        lang.color = utils.getColor lang.palette, 'A200'
+        delete lang.items
+        lang
 
-            id:           r.id
-            name:         r.get 'name'
-            originalName: r.get 'originalName'
-            code:         r.get 'code'
-            toggleLabel:  r.get 'toggleLabel'
-            palette:      palette
-            color:        utils.getColor palette, 'A200'
+    $http.jsonp 'https://phonetics.parseapp.com/fresh.json?callback=JSON_CALLBACK'
+      .then (response) ->
 
-        error: (err) ->
-          cb err, []
+        # order here is important: `langs` after `sounds`
+        sounds = processSounds response.data
+        langs = processLangs response.data
 
-    @getSounds = (lang, cb) ->
-      query = new Parse.Query Sounds
-      query.equalTo 'language', lang
-      query.find
-        success: (results) ->
-          cb null, results.map (r) ->
-            name = r.get 'name'
-            type = r.get 'type'
+        # execute all pending callbacks
+        for name, cb of cbs
+          if name is 'langs'
+            cb langs
+          else
+            cb sounds[name]
 
-            name:     name
-            type:     type
-            altNames: r.get 'altNames'
-            parseFile:r.get('file')?.url()?.replace /^http/, 'https'
-            localFile:"sounds/#{lang.code}/#{type}/#{name}.mp3"
+        # clear callback cache
+        cbs = {}
 
-        error: (err) ->
-          cb err, []
-    @
+    getLangs: (cb) ->
+      return cb langs if langs
+      cbs['langs'] = cb
+
+    getSounds: (lang, cb) ->
+      return cb sounds[lang] if sounds[lang]?
+      cbs[lang] = cb
 
   .factory 'panels', ->
     new class Panels
@@ -88,16 +89,15 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
       current: 0
       panels: []
 
-      constructor: ->
       init: (@panels) ->
         @panels.unshift
           name: 'langs'
-          toggle: off
+          toggle: false
           height: _defaultHeight
 
         @panels.push
           name: 'about'
-          toggle: off
+          toggle: false
           height: _defaultHeight
 
       setDefaultHeight: (defaultHeight) -> _defaultHeight = defaultHeight
@@ -206,14 +206,13 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
 
       $scope.$apply()
 
-    ParseServ.getLangs (err, langs) ->
+    ParseServ.getLangs (langs) ->
       panels.init langs.map (l) ->
         name: l.code
-        toggle: off
+        toggle: false
         labels: l.toggleLabel
 
       $scope.langs = langs
-      $scope.$apply()
 
   .controller 'SoundBoardCtrl', ($scope, ParseServ, utils, panels) ->
     $scope.normalizedSoundName = (sound) -> utils.normalize sound.name
@@ -241,26 +240,17 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
 
       return name
 
-    lang = new Parse.Object 'Languages'
-    lang.id = $scope.lang.id
-    lang.code = $scope.lang.code
-    ParseServ.getSounds lang, (err, sounds) ->
+    ParseServ.getSounds $scope.lang.code, (sounds) ->
       $scope.sounds = sounds
-      $scope.$apply()
 
   .directive 'aSound', ->
     restrict: 'A'
     link: (scope, element, attr) ->
-      scope.playing = false
       player = element.find('audio')[0]
 
       element.on 'click', ->
-        scope.playing = true
         player.currentTime = 0
         player.play()
-        player.addEventListener 'ended', ->
-          scope.playing = false
-          scope.$apply()
 
   .directive 'aPanel', ($window, $timeout, utils, measurer, panels) ->
     restrict: 'A'

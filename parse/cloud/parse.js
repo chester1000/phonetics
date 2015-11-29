@@ -40,10 +40,10 @@ getLang = function(langs, code) {
   return null;
 };
 
-app.get('/', function(req, res) {
+app.get('/fresh.json', function(req, res) {
   return new Parse.Query('Sounds2').include('language').limit(1000).find({
     success: function(records) {
-      return res.json(200, records.reduce(function(p, c) {
+      return res.jsonp(200, records.reduce(function(p, c) {
         var code, lang, sLang;
         sLang = c != null ? c.get('language') : void 0;
         code = sLang != null ? sLang.get('code') : void 0;

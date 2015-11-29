@@ -23,13 +23,13 @@ getLang = (langs, code) ->
   return l for l in langs when l.code is code
   return null
 
-app.get '/', (req, res) ->
+app.get '/fresh.json', (req, res) ->
   new Parse.Query 'Sounds2'
     .include 'language'
     .limit 1000
     .find
       success: (records) ->
-        res.json 200, records.reduce (p, c) ->
+        res.jsonp 200, records.reduce (p, c) ->
           sLang = c?.get 'language'
           code = sLang?.get 'code'
 

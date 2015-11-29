@@ -36,64 +36,61 @@
       _results.push($mdThemingProvider.theme(t.primary).primaryPalette(t.primary).accentPalette(t.accent));
     }
     return _results;
-  }).factory('ParseServ', function(utils) {
-    var Langs, Sounds;
-    Parse.initialize('BdvYraypXe3U33UV5mGBRgPmqC2xUyPoP54QgkML', 'kY4MCB6NyGtXjEY6TeAtFWr1zhLv377L3HIiBbas');
-    Langs = Parse.Object.extend('Languages');
-    Sounds = Parse.Object.extend('Sounds2');
-    this.getLangs = function(cb) {
-      var query;
-      query = new Parse.Query(Langs);
-      return query.find({
-        success: function(results) {
-          return cb(null, results.map(function(r) {
-            var palette;
-            palette = r.get('palette');
-            return {
-              id: r.id,
-              name: r.get('name'),
-              originalName: r.get('originalName'),
-              code: r.get('code'),
-              toggleLabel: r.get('toggleLabel'),
-              palette: palette,
-              color: utils.getColor(palette, 'A200')
-            };
-          }));
-        },
-        error: function(err) {
-          return cb(err, []);
-        }
+  }).factory('ParseServ', function(utils, $http) {
+    var cbs, langs, processLangs, processSounds, sounds;
+    cbs = {};
+    langs = null;
+    sounds = null;
+    processSounds = function(data) {
+      return data.reduce(function(langs, lang) {
+        langs[lang.code] = lang.items.map(function(sound) {
+          sound.localFile = "sounds/" + lang.code + "/" + sound.type + "/" + sound.name + ".mp3";
+          return sound;
+        });
+        return langs;
+      }, {});
+    };
+    processLangs = function(data) {
+      return data.map(function(lang) {
+        lang.color = utils.getColor(lang.palette, 'A200');
+        delete lang.items;
+        return lang;
       });
     };
-    this.getSounds = function(lang, cb) {
-      var query;
-      query = new Parse.Query(Sounds);
-      query.equalTo('language', lang);
-      return query.find({
-        success: function(results) {
-          return cb(null, results.map(function(r) {
-            var name, type, _ref, _ref1;
-            name = r.get('name');
-            type = r.get('type');
-            return {
-              name: name,
-              type: type,
-              altNames: r.get('altNames'),
-              parseFile: (_ref = r.get('file')) != null ? (_ref1 = _ref.url()) != null ? _ref1.replace(/^http/, 'https') : void 0 : void 0,
-              localFile: "sounds/" + lang.code + "/" + type + "/" + name + ".mp3"
-            };
-          }));
-        },
-        error: function(err) {
-          return cb(err, []);
+    $http.jsonp('https://phonetics.parseapp.com/fresh.json?callback=JSON_CALLBACK').then(function(response) {
+      var cb, name;
+      sounds = processSounds(response.data);
+      langs = processLangs(response.data);
+      for (name in cbs) {
+        cb = cbs[name];
+        if (name === 'langs') {
+          cb(langs);
+        } else {
+          cb(sounds[name]);
         }
-      });
+      }
+      return cbs = {};
+    });
+    return {
+      getLangs: function(cb) {
+        if (langs) {
+          return cb(langs);
+        }
+        return cbs['langs'] = cb;
+      },
+      getSounds: function(lang, cb) {
+        if (sounds[lang] != null) {
+          return cb(sounds[lang]);
+        }
+        return cbs[lang] = cb;
+      }
     };
-    return this;
   }).factory('panels', function() {
     var Panels;
     return new (Panels = (function() {
       var _changeListeners, _defaultHeight;
+
+      function Panels() {}
 
       _changeListeners = [];
 
@@ -102,8 +99,6 @@
       Panels.prototype.current = 0;
 
       Panels.prototype.panels = [];
-
-      function Panels() {}
 
       Panels.prototype.init = function(panels) {
         this.panels = panels;
@@ -309,7 +304,7 @@
       }
       return $scope.$apply();
     });
-    return ParseServ.getLangs(function(err, langs) {
+    return ParseServ.getLangs(function(langs) {
       panels.init(langs.map(function(l) {
         return {
           name: l.code,
@@ -317,11 +312,9 @@
           labels: l.toggleLabel
         };
       }));
-      $scope.langs = langs;
-      return $scope.$apply();
+      return $scope.langs = langs;
     });
   }).controller('SoundBoardCtrl', function($scope, ParseServ, utils, panels) {
-    var lang;
     $scope.normalizedSoundName = function(sound) {
       return utils.normalize(sound.name);
     };
@@ -348,28 +341,18 @@
       }
       return name;
     };
-    lang = new Parse.Object('Languages');
-    lang.id = $scope.lang.id;
-    lang.code = $scope.lang.code;
-    return ParseServ.getSounds(lang, function(err, sounds) {
-      $scope.sounds = sounds;
-      return $scope.$apply();
+    return ParseServ.getSounds($scope.lang.code, function(sounds) {
+      return $scope.sounds = sounds;
     });
   }).directive('aSound', function() {
     return {
       restrict: 'A',
       link: function(scope, element, attr) {
         var player;
-        scope.playing = false;
         player = element.find('audio')[0];
         return element.on('click', function() {
-          scope.playing = true;
           player.currentTime = 0;
-          player.play();
-          return player.addEventListener('ended', function() {
-            scope.playing = false;
-            return scope.$apply();
-          });
+          return player.play();
         });
       }
     };
