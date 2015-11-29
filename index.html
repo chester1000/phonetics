@@ -32,7 +32,7 @@
           let logger = (str) => (obj) => console.log(str, obj);
 
           navigator.serviceWorker
-            .register('js/service-worker.js', {scope:'phonetics/*'})
+            .register('js/service-worker.js')
             .then(logger('registered'))
             .catch(logger('register errored with: '));
 
