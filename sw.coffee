@@ -1,6 +1,5 @@
 'use strict'
 
-console.log 'Installing service worker...'
 self.oninstall = (e) ->
   console.log 'oninstall'
 
