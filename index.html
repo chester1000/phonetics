@@ -21,9 +21,24 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-aria.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.0.0-rc4/angular-material.min.js"></script>
 
-    <script src="main.js"></script>
-    <script src="angular-ripple.js"></script>
-    <script src="utils.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/angular-ripple.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+      (function() {
+        'use strict';
+
+        if ('serviceWorker' in navigator) {
+          let logger = (str) => (obj) => console.log(str, obj);
+
+          navigator.serviceWorker
+            .register('js/service-worker.js')
+            .then(logger('registered'))
+            .catch(logger('register errored with: '));
+
+        } else console.log('Service Worker not available');
+      })();
+    </script>
   </head>
   <body ng-controller="LangCtrl" prevent-popups md-theme="{{ dynamicTheme }}" snap>
     <div id="loader">
