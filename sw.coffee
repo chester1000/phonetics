@@ -23,25 +23,19 @@ self.onfetch = (e) ->
   arr = e.request.url.split '?soundFallback='
   if arr.length isnt 2
     e.respondWith caches.match(e.request).then (cacheResponse) ->
-      if cacheResponse
-        console.log 'cache (any):', e.request.url
-        return cacheResponse
+      return cacheResponse if cacheResponse
 
       fetch e.request
         .then (response) ->
           getCacheObject (cache) ->
             cache
               .put e.request, response.clone()
-              .then ->
-                console.log 'fresh (any):', e.request.url
-                response
+              .then -> response
 
   else
     [parseFile, localFile] = arr
     e.respondWith caches.match(localFile).then (cacheRespose) ->
-      if cacheRespose
-        console.log 'cache (sound):', e.request.url
-        return cacheRespose
+      return cacheRespose if cacheRespose
 
       Promise.race [
           fetch localFile
@@ -51,6 +45,4 @@ self.onfetch = (e) ->
           getCacheObject (cache) ->
             cache
               .put localFile, response.clone()
-              .then ->
-                console.log 'fresh (sound):', localFile
-                response
+              .then -> response

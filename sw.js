@@ -21,13 +21,11 @@
     if (arr.length !== 2) {
       return e.respondWith(caches.match(e.request).then(function(cacheResponse) {
         if (cacheResponse) {
-          console.log('cache (any):', e.request.url);
           return cacheResponse;
         }
         return fetch(e.request).then(function(response) {
           return getCacheObject(function(cache) {
             return cache.put(e.request, response.clone()).then(function() {
-              console.log('fresh (any):', e.request.url);
               return response;
             });
           });
@@ -37,13 +35,11 @@
       parseFile = arr[0], localFile = arr[1];
       return e.respondWith(caches.match(localFile).then(function(cacheRespose) {
         if (cacheRespose) {
-          console.log('cache (sound):', e.request.url);
           return cacheRespose;
         }
         return Promise.race([fetch(localFile), fetch(parseFile)]).then(function(response) {
           return getCacheObject(function(cache) {
             return cache.put(localFile, response.clone()).then(function() {
-              console.log('fresh (sound):', localFile);
               return response;
             });
           });
