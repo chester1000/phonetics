@@ -59,6 +59,9 @@
     };
     $http.jsonp('https://phonetics.parseapp.com/fresh.json?callback=JSON_CALLBACK').then(function(response) {
       var cb, name;
+      response.data.sort(function(a, b) {
+        return a.name.localeCompare(b.name);
+      });
       sounds = processSounds(response.data);
       langs = processLangs(response.data);
       for (name in cbs) {

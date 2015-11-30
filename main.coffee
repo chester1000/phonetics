@@ -59,6 +59,9 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
     $http.jsonp 'https://phonetics.parseapp.com/fresh.json?callback=JSON_CALLBACK'
       .then (response) ->
 
+        response.data.sort (a, b) ->
+          a.name.localeCompare b.name
+
         # order here is important: `langs` after `sounds`
         sounds = processSounds response.data
         langs = processLangs response.data
