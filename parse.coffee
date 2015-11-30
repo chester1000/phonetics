@@ -15,9 +15,10 @@ cleanLang = (l) ->
   items:        []
 
 cleanSound = (s) ->
-  name: s?.get 'name'
-  type: s?.get 'type'
-  file: s?.get('file')?.url()?.replace /^http/, 'https'
+  name:     s?.get 'name'
+  altNames: s?.get 'altNames'
+  type:     s?.get 'type'
+  file:     s?.get('file')?.url()?.replace /^http/, 'https'
 
 getLang = (langs, code) ->
   return l for l in langs when l.code is code

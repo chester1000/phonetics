@@ -24,6 +24,7 @@ cleanSound = function(s) {
   var _ref, _ref1;
   return {
     name: s != null ? s.get('name') : void 0,
+    altNames: s != null ? s.get('altNames') : void 0,
     type: s != null ? s.get('type') : void 0,
     file: s != null ? (_ref = s.get('file')) != null ? (_ref1 = _ref.url()) != null ? _ref1.replace(/^http/, 'https') : void 0 : void 0 : void 0
   };
