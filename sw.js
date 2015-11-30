@@ -11,26 +11,39 @@
 
   self.oninstall = function(e) {
     return e.waitUntil(getCacheObject(function(cache) {
-      return cache.addAll(['/index.html', '/styles.css', '/js/angular-ripple.js', '/js/main.js', '/js/utils.js']);
+      return cache.addAll(['/', '/styles.css', '/js/angular-ripple.js', '/js/main.js', '/js/utils.js']);
     }));
   };
 
   self.onfetch = function(e) {
-    var arr;
+    var arr, localFile, parseFile;
     arr = e.request.url.split('?soundFallback=');
-    if (arr.length === 2) {
-      console.log("sound url: " + arr[0]);
-      return e.respondWith(fetch(e.request));
-    } else {
+    if (arr.length !== 2) {
       return e.respondWith(caches.match(e.request).then(function(cacheResponse) {
         if (cacheResponse) {
-          console.log('cache:', e.request.url);
+          console.log('cache (any):', e.request.url);
           return cacheResponse;
         }
         return fetch(e.request).then(function(response) {
           return getCacheObject(function(cache) {
             return cache.put(e.request, response.clone()).then(function() {
-              console.log('fresh:', e.request.url);
+              console.log('fresh (any):', e.request.url);
+              return response;
+            });
+          });
+        });
+      }));
+    } else {
+      parseFile = arr[0], localFile = arr[1];
+      return e.respondWith(caches.match(localFile).then(function(cacheRespose) {
+        if (cacheRespose) {
+          console.log('cache (sound):', e.request.url);
+          return cacheRespose;
+        }
+        return Promise.race([fetch(localFile), fetch(parseFile)]).then(function(response) {
+          return getCacheObject(function(cache) {
+            return cache.put(localFile, response.clone()).then(function() {
+              console.log('fresh (sound):', localFile);
               return response;
             });
           });
