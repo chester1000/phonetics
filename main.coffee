@@ -8,7 +8,6 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
     ]
 
     $locationProvider.html5Mode true
-
     $mdThemingProvider.alwaysWatchTheme true
 
     themes = [
