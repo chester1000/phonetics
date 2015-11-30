@@ -11,11 +11,11 @@ getCacheObject = (cb) ->
 self.oninstall = (e) ->
   e.waitUntil getCacheObject (cache) ->
     cache.addAll [
-      '/'
-      '/styles.css'
-      '/js/angular-ripple.js'
-      '/js/main.js'
-      '/js/utils.js'
+      '/phonetics/'
+      'styles.css'
+      'js/angular-ripple.js'
+      'js/main.js'
+      'js/utils.js'
     ]
 
 

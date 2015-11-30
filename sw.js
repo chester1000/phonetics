@@ -11,7 +11,7 @@
 
   self.oninstall = function(e) {
     return e.waitUntil(getCacheObject(function(cache) {
-      return cache.addAll(['/', '/styles.css', '/js/angular-ripple.js', '/js/main.js', '/js/utils.js']);
+      return cache.addAll(['/phonetics/', 'styles.css', 'js/angular-ripple.js', 'js/main.js', 'js/utils.js']);
     }));
   };
 
