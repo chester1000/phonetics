@@ -140,7 +140,8 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
   .factory 'measurer', ($window, panels) ->
     new class Measurer
       constructor: -> panels.setDefaultHeight @getViewPortHeight()
-      getToolbarHeight: -> 64
+      getToolbarHeight: ->
+        document.getElementsByTagName('md-toolbar')[0].offsetHeight
       getWindowHeight: -> $window.innerHeight
       getViewPortHeight: -> @getWindowHeight() - @getToolbarHeight()
       getCurrentPanelInfo: ->
@@ -175,13 +176,13 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
 
         scrollToPoint
 
-  .controller 'LangCtrl', ($scope, $rootScope, ParseServ, panels, utils) ->
-    $scope.isLastPanel = false
+  .controller 'LangCtrl', ($scope, $rootScope, ParseServ, panels, utils, measurer) ->
 
-    $scope.toggleStatus = false
-    $scope.notifyChange   = -> panels.cacheToggleStatus $scope.toggleStatus
-    $scope.getToggleLabel = -> panels.getCurrentLabel   $scope.toggleStatus
-
+    $scope.isLastPanel      = false
+    $scope.toggleStatus     = false
+    $scope.notifyChange     = -> panels.cacheToggleStatus $scope.toggleStatus
+    $scope.getToggleLabel   = -> panels.getCurrentLabel   $scope.toggleStatus
+    $scope.getToolbarHeight = measurer.getToolbarHeight
 
     setStuff = (theme, title) ->
       $scope.title = title

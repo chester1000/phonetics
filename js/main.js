@@ -224,7 +224,7 @@
       }
 
       Measurer.prototype.getToolbarHeight = function() {
-        return 64;
+        return document.getElementsByTagName('md-toolbar')[0].offsetHeight;
       };
 
       Measurer.prototype.getWindowHeight = function() {
@@ -273,7 +273,7 @@
       return Measurer;
 
     })());
-  }).controller('LangCtrl', function($scope, $rootScope, ParseServ, panels, utils) {
+  }).controller('LangCtrl', function($scope, $rootScope, ParseServ, panels, utils, measurer) {
     var setStuff;
     $scope.isLastPanel = false;
     $scope.toggleStatus = false;
@@ -283,6 +283,7 @@
     $scope.getToggleLabel = function() {
       return panels.getCurrentLabel($scope.toggleStatus);
     };
+    $scope.getToolbarHeight = measurer.getToolbarHeight;
     setStuff = function(theme, title) {
       $scope.title = title;
       $scope.dynamicTheme = theme;
