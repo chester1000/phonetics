@@ -6,7 +6,7 @@
 
   angular.module('phoneticsApp', ['ngMaterial', 'angularRipple']).config(function($sceDelegateProvider, $locationProvider, $mdThemingProvider) {
     var t, themes, _i, _len, _results;
-    $sceDelegateProvider.resourceUrlWhitelist(['self', 'https://files.parsetfss.com/**']);
+    $sceDelegateProvider.resourceUrlWhitelist(['self']);
     $locationProvider.html5Mode(true);
     $mdThemingProvider.alwaysWatchTheme(true);
     themes = [
@@ -44,7 +44,7 @@
     processSounds = function(data) {
       return data.reduce(function(langs, lang) {
         langs[lang.code] = lang.items.map(function(sound) {
-          sound.localFile = "sounds/" + lang.code + "/" + sound.type + "/" + sound.name + ".mp3";
+          sound.file = "sounds/" + lang.code + "/" + sound.type + "/" + sound.name + ".mp3";
           return sound;
         });
         return langs;
@@ -57,7 +57,7 @@
         return lang;
       });
     };
-    $http.jsonp('https://phonetics.parseapp.com/fresh.json?callback=JSON_CALLBACK').then(function(response) {
+    $http.get('data.json').then(function(response) {
       var cb, name;
       response.data.sort(function(a, b) {
         return a.name.localeCompare(b.name);

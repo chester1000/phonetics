@@ -79,7 +79,7 @@
           md-on-layout="setMinHeight()">
 
           <md-grid-tile a-sound ng-repeat="s in sounds | filter:toggleFilter | orderBy:normalizedSoundName">
-            <audio ng-src="{{s.file + '?soundFallback=' + s.localFile}}" preload="auto"></audio>
+            <audio ng-src="{{s.file}}" preload="auto"></audio>
             <a angular-ripple
               href="#{{lang.code}}_{{s.name}}"
               class="md-display-3 letter">{{ getSoundLabel(s.name, s.altNames[0]) }}</a>
@@ -118,18 +118,6 @@
     </md-content>
 
     <script>
-      (function() {
-        'use strict';
-
-        if ('serviceWorker' in navigator) {
-          let logger = (str) => (obj) => console.log(str, obj);
-
-          navigator.serviceWorker
-            .register('sw.js')
-            .then(logger('registered'))
-            .catch(logger('register errored with: '));
-        }
-      })();
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
       function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
       e=o.createElement(i);r=o.getElementsByTagName(i)[0];

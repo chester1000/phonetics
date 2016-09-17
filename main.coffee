@@ -4,7 +4,6 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
   .config ($sceDelegateProvider, $locationProvider, $mdThemingProvider) ->
     $sceDelegateProvider.resourceUrlWhitelist [
       'self'
-      'https://files.parsetfss.com/**'
     ]
 
     $locationProvider.html5Mode true
@@ -44,7 +43,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
     processSounds = (data) ->
       data.reduce (langs, lang) ->
         langs[lang.code] = lang.items.map (sound) ->
-          sound.localFile = "sounds/#{lang.code}/#{sound.type}/#{sound.name}.mp3"
+          sound.file = "sounds/#{lang.code}/#{sound.type}/#{sound.name}.mp3"
           sound
         langs
       , {}
@@ -55,7 +54,7 @@ angular.module 'phoneticsApp', ['ngMaterial', 'angularRipple']
         delete lang.items
         lang
 
-    $http.jsonp 'https://phonetics.parseapp.com/fresh.json?callback=JSON_CALLBACK'
+    $http.get 'data.json'
       .then (response) ->
 
         response.data.sort (a, b) ->

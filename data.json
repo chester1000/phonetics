@@ -1,0 +1,1093 @@
+[
+  {
+    "code": "th",
+    "name": "Thai",
+    "originalName": "ภาษาไทย",
+    "toggleLabel": [
+      "names",
+      "sounds"
+    ],
+    "palette": "amber",
+    "items": [
+      {
+        "name": "ช",
+        "type": "name"
+      },
+      {
+        "name": "ฟ",
+        "type": "name"
+      },
+      {
+        "name": "ส",
+        "type": "name"
+      },
+      {
+        "name": "ว",
+        "type": "name"
+      },
+      {
+        "name": "ฌ",
+        "type": "name"
+      },
+      {
+        "name": "พ",
+        "type": "name"
+      },
+      {
+        "name": "ฮ",
+        "type": "name"
+      },
+      {
+        "name": "ผ",
+        "type": "name"
+      },
+      {
+        "name": "ษ",
+        "type": "name"
+      },
+      {
+        "name": "ต",
+        "type": "name"
+      },
+      {
+        "name": "ธ",
+        "type": "name"
+      },
+      {
+        "name": "ล",
+        "type": "name"
+      },
+      {
+        "name": "ด",
+        "type": "name"
+      },
+      {
+        "name": "บ",
+        "type": "name"
+      },
+      {
+        "name": "ถ",
+        "type": "name"
+      },
+      {
+        "name": "ฐ",
+        "type": "name"
+      },
+      {
+        "name": "ศ",
+        "type": "name"
+      },
+      {
+        "name": "ฆ",
+        "type": "name"
+      },
+      {
+        "name": "น",
+        "type": "name"
+      },
+      {
+        "name": "ง",
+        "type": "name"
+      },
+      {
+        "name": "ก",
+        "type": "name"
+      },
+      {
+        "name": "ป",
+        "type": "name"
+      },
+      {
+        "name": "ฬ",
+        "type": "name"
+      },
+      {
+        "name": "ห",
+        "type": "name"
+      },
+      {
+        "name": "ฅ",
+        "type": "name"
+      },
+      {
+        "name": "ฏ",
+        "type": "name"
+      },
+      {
+        "name": "ภ",
+        "type": "name"
+      },
+      {
+        "name": "อ",
+        "type": "name"
+      },
+      {
+        "name": "ข",
+        "type": "name"
+      },
+      {
+        "name": "ฎ",
+        "type": "name"
+      },
+      {
+        "name": "จ",
+        "type": "name"
+      },
+      {
+        "name": "ฉ",
+        "type": "name"
+      },
+      {
+        "name": "ม",
+        "type": "name"
+      },
+      {
+        "name": "ฑ",
+        "type": "name"
+      },
+      {
+        "name": "ร",
+        "type": "name"
+      },
+      {
+        "name": "ณ",
+        "type": "name"
+      },
+      {
+        "name": "ท",
+        "type": "name"
+      },
+      {
+        "name": "ฒ",
+        "type": "name"
+      },
+      {
+        "name": "ฃ",
+        "type": "name"
+      },
+      {
+        "name": "ค",
+        "type": "name"
+      },
+      {
+        "name": "ฝ",
+        "type": "name"
+      },
+      {
+        "name": "ญ",
+        "type": "name"
+      },
+      {
+        "name": "ย",
+        "type": "name"
+      },
+      {
+        "name": "ซ",
+        "type": "name"
+      }
+    ]
+  },
+  {
+    "code": "ko",
+    "name": "Korean",
+    "originalName": "조선말",
+    "palette": "red",
+    "items": [
+      {
+        "name": "ㅅ",
+        "type": "sound"
+      },
+      {
+        "name": "ㄷ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅔ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅒ",
+        "type": "sound"
+      },
+      {
+        "name": "ㄲ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅏ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅙ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅢ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅂ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅡ",
+        "type": "sound"
+      },
+      {
+        "name": "ㄸ",
+        "type": "sound"
+      },
+      {
+        "name": "ㄱ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅝ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅛ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅁ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅞ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅃ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅐ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅜ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅑ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅣ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅖ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅘ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅟ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅉ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅆ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅈ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅊ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅎ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅌ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅚ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅍ",
+        "type": "sound"
+      },
+      {
+        "name": "ㄹ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅗ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅕ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅇ",
+        "type": "sound"
+      },
+      {
+        "name": "ㄴ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅓ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅠ",
+        "type": "sound"
+      },
+      {
+        "name": "ㅋ",
+        "type": "sound"
+      }
+    ]
+  },
+  {
+    "code": "en",
+    "name": "English",
+    "toggleLabel": [
+      "alphabet",
+      "phonemics"
+    ],
+    "palette": "light-blue",
+    "items": [
+      {
+        "name": "ŋ",
+        "type": "phonetic"
+      },
+      {
+        "name": "æ",
+        "type": "phonetic"
+      },
+      {
+        "name": "iː",
+        "type": "phonetic"
+      },
+      {
+        "name": "s",
+        "type": "sound"
+      },
+      {
+        "name": "v",
+        "type": "sound"
+      },
+      {
+        "name": "s",
+        "type": "phonetic"
+      },
+      {
+        "name": "l",
+        "type": "sound"
+      },
+      {
+        "name": "w",
+        "type": "phonetic"
+      },
+      {
+        "name": "j",
+        "type": "phonetic"
+      },
+      {
+        "name": "c",
+        "type": "sound"
+      },
+      {
+        "name": "z",
+        "type": "phonetic"
+      },
+      {
+        "name": "θ",
+        "type": "phonetic"
+      },
+      {
+        "name": "ɔɪ",
+        "type": "phonetic"
+      },
+      {
+        "name": "l",
+        "type": "phonetic"
+      },
+      {
+        "name": "ð",
+        "type": "phonetic"
+      },
+      {
+        "name": "ɑː",
+        "type": "phonetic"
+      },
+      {
+        "name": "ɒ",
+        "type": "phonetic"
+      },
+      {
+        "name": "ʃ",
+        "type": "phonetic"
+      },
+      {
+        "name": "dʒ",
+        "type": "phonetic"
+      },
+      {
+        "name": "m",
+        "type": "phonetic"
+      },
+      {
+        "name": "k",
+        "type": "phonetic"
+      },
+      {
+        "name": "g",
+        "type": "phonetic"
+      },
+      {
+        "name": "tʃ",
+        "type": "phonetic"
+      },
+      {
+        "name": "t",
+        "type": "sound"
+      },
+      {
+        "name": "d",
+        "type": "sound"
+      },
+      {
+        "name": "w",
+        "type": "sound"
+      },
+      {
+        "name": "q",
+        "type": "sound"
+      },
+      {
+        "name": "ʒ",
+        "type": "phonetic"
+      },
+      {
+        "name": "ɜː",
+        "type": "phonetic"
+      },
+      {
+        "name": "ə",
+        "type": "phonetic"
+      },
+      {
+        "name": "y",
+        "type": "sound"
+      },
+      {
+        "name": "ɪ",
+        "type": "phonetic"
+      },
+      {
+        "name": "m",
+        "type": "sound"
+      },
+      {
+        "name": "i",
+        "type": "sound"
+      },
+      {
+        "name": "eə",
+        "type": "phonetic"
+      },
+      {
+        "name": "a",
+        "type": "sound"
+      },
+      {
+        "name": "eɪ",
+        "type": "phonetic"
+      },
+      {
+        "name": "f",
+        "type": "sound"
+      },
+      {
+        "name": "d",
+        "type": "phonetic"
+      },
+      {
+        "name": "əʊ",
+        "type": "phonetic"
+      },
+      {
+        "name": "g",
+        "type": "sound"
+      },
+      {
+        "name": "aɪ",
+        "type": "phonetic"
+      },
+      {
+        "name": "n",
+        "type": "phonetic"
+      },
+      {
+        "name": "b",
+        "type": "phonetic"
+      },
+      {
+        "name": "x",
+        "type": "sound"
+      },
+      {
+        "name": "h",
+        "type": "phonetic"
+      },
+      {
+        "name": "e",
+        "type": "sound"
+      },
+      {
+        "name": "j",
+        "type": "sound"
+      },
+      {
+        "name": "t",
+        "type": "phonetic"
+      },
+      {
+        "name": "ʊ",
+        "type": "phonetic"
+      },
+      {
+        "name": "r",
+        "type": "phonetic"
+      },
+      {
+        "name": "e",
+        "type": "phonetic"
+      },
+      {
+        "name": "k",
+        "type": "sound"
+      },
+      {
+        "name": "p",
+        "type": "sound"
+      },
+      {
+        "name": "aʊ",
+        "type": "phonetic"
+      },
+      {
+        "name": "v",
+        "type": "phonetic"
+      },
+      {
+        "name": "uː",
+        "type": "phonetic"
+      },
+      {
+        "name": "b",
+        "type": "sound"
+      },
+      {
+        "name": "f",
+        "type": "phonetic"
+      },
+      {
+        "name": "ɔː",
+        "type": "phonetic"
+      },
+      {
+        "name": "o",
+        "type": "sound"
+      },
+      {
+        "name": "h",
+        "type": "sound"
+      },
+      {
+        "name": "p",
+        "type": "phonetic"
+      },
+      {
+        "name": "ʌ",
+        "type": "phonetic"
+      },
+      {
+        "name": "z",
+        "type": "sound"
+      },
+      {
+        "name": "u",
+        "type": "sound"
+      },
+      {
+        "name": "r",
+        "type": "sound"
+      },
+      {
+        "name": "n",
+        "type": "sound"
+      },
+      {
+        "name": "ɪə",
+        "type": "phonetic"
+      }
+    ]
+  },
+  {
+    "code": "bopo",
+    "name": "Chinese",
+    "originalName": "漢語",
+    "toggleLabel": [
+      "zhuyin",
+      "pinyin"
+    ],
+    "palette": "teal",
+    "items": [
+      {
+        "name": "ㄚ",
+        "altNames": [
+          "a"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄓ",
+        "altNames": [
+          "zh"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄐ",
+        "altNames": [
+          "j"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄎ",
+        "altNames": [
+          "k"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄉ",
+        "altNames": [
+          "d"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄨ",
+        "altNames": [
+          "u"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄈ",
+        "altNames": [
+          "f"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄡ",
+        "altNames": [
+          "ou"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄍ",
+        "altNames": [
+          "g"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄅ",
+        "altNames": [
+          "b"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄋ",
+        "altNames": [
+          "n"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄟ",
+        "altNames": [
+          "ei"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄗ",
+        "altNames": [
+          "z"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄛ",
+        "altNames": [
+          "o"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄙ",
+        "altNames": [
+          "s"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄆ",
+        "altNames": [
+          "p"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄇ",
+        "altNames": [
+          "m"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄠ",
+        "altNames": [
+          "ao"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄤ",
+        "altNames": [
+          "ang"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄣ",
+        "altNames": [
+          "en"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄝ",
+        "altNames": [
+          "eh"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄊ",
+        "altNames": [
+          "t"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄥ",
+        "altNames": [
+          "eng"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄧ",
+        "altNames": [
+          "i"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄏ",
+        "altNames": [
+          "h"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄞ",
+        "altNames": [
+          "ai"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄩ",
+        "altNames": [
+          "yu",
+          "ü"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄜ",
+        "altNames": [
+          "e"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄑ",
+        "altNames": [
+          "q"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄦ",
+        "altNames": [
+          "er"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄖ",
+        "altNames": [
+          "r"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄒ",
+        "altNames": [
+          "x"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄘ",
+        "altNames": [
+          "c"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄌ",
+        "altNames": [
+          "l"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄢ",
+        "altNames": [
+          "an"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄔ",
+        "altNames": [
+          "sh"
+        ],
+        "type": "sound"
+      },
+      {
+        "name": "ㄕ",
+        "altNames": [
+          "sh"
+        ],
+        "type": "sound"
+      }
+    ]
+  },
+  {
+    "code": "pl",
+    "name": "Polish",
+    "originalName": "Polski",
+    "toggleLabel": [
+      "simple",
+      "extended"
+    ],
+    "palette": "light-green",
+    "items": [
+      {
+        "name": "ą",
+        "type": "name"
+      },
+      {
+        "name": "k",
+        "type": "name"
+      },
+      {
+        "name": "o",
+        "type": "name"
+      },
+      {
+        "name": "ę",
+        "type": "name"
+      },
+      {
+        "name": "rz",
+        "type": "name"
+      },
+      {
+        "name": "w",
+        "type": "name"
+      },
+      {
+        "name": "ź",
+        "type": "name"
+      },
+      {
+        "name": "s",
+        "type": "name"
+      },
+      {
+        "name": "c",
+        "type": "name"
+      },
+      {
+        "name": "a",
+        "type": "name"
+      },
+      {
+        "name": "ł",
+        "type": "name"
+      },
+      {
+        "name": "ch",
+        "type": "name"
+      },
+      {
+        "name": "h",
+        "type": "name"
+      },
+      {
+        "name": "l",
+        "type": "name"
+      },
+      {
+        "name": "dż",
+        "type": "name"
+      },
+      {
+        "name": "y",
+        "type": "name"
+      },
+      {
+        "name": "g",
+        "type": "name"
+      },
+      {
+        "name": "j",
+        "type": "name"
+      },
+      {
+        "name": "ć",
+        "type": "name"
+      },
+      {
+        "name": "r",
+        "type": "name"
+      },
+      {
+        "name": "t",
+        "type": "name"
+      },
+      {
+        "name": "ó",
+        "type": "name"
+      },
+      {
+        "name": "sz",
+        "type": "name"
+      },
+      {
+        "name": "ń",
+        "type": "name"
+      },
+      {
+        "name": "p",
+        "type": "name"
+      },
+      {
+        "name": "i",
+        "type": "name"
+      },
+      {
+        "name": "ś",
+        "type": "name"
+      },
+      {
+        "name": "b",
+        "type": "name"
+      },
+      {
+        "name": "f",
+        "type": "name"
+      },
+      {
+        "name": "dź",
+        "type": "name"
+      },
+      {
+        "name": "e",
+        "type": "name"
+      },
+      {
+        "name": "ci",
+        "type": "name"
+      },
+      {
+        "name": "n",
+        "type": "name"
+      },
+      {
+        "name": "ż",
+        "type": "name"
+      },
+      {
+        "name": "d",
+        "type": "name"
+      },
+      {
+        "name": "cz",
+        "type": "name"
+      },
+      {
+        "name": "m",
+        "type": "name"
+      },
+      {
+        "name": "z",
+        "type": "name"
+      },
+      {
+        "name": "dzi",
+        "type": "name"
+      },
+      {
+        "name": "u",
+        "type": "name"
+      },
+      {
+        "name": "si",
+        "type": "name"
+      }
+    ]
+  }
+]
